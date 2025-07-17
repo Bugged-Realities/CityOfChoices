@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
-from backend.app import db
-from backend.app.models.user import User
+from app import db
+from app.models.user import User
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import create_access_token
 
