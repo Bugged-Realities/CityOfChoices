@@ -1,14 +1,17 @@
-import { useNavigate } from "react-router-dom";
+import HeaderSection from "../components/Header";
+import GameOverviewSection from "../components/GameOverviewSection";
+import HowItWorksSection from "../components/HowItWorksSection";
+import Footer from "../components/Footer";
 
-function HomePage() {
-  const navigate = useNavigate();
+const HomePage = () => {
   return (
-    <div>
-      <h1>Welcome to City of Choices</h1>
-      <button onClick={() => navigate("/login")}>Login</button>
-      <button onClick={() => navigate("/signup")}>Sign Up</button>
-    </div>
+    <>
+      <HeaderSection />
+      <GameOverviewSection />
+      <HowItWorksSection />
+      <Footer />
+    </>
   );
-}
+};
 
 export default HomePage;

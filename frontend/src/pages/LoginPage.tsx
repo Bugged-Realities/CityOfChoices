@@ -36,7 +36,7 @@ function LoginPage() {
       }
       if (data && data.access_token) {
         localStorage.setItem("token", data.access_token);
-        navigate("/character");
+        navigate("/game");
       } else {
         setError("No access token in response");
       }
