@@ -13,3 +13,23 @@ class Character(db.Model):
     user = db.relationship('User', back_populates='character')
     game_states = db.relationship('GameState', back_populates='character', cascade='all, delete-orphan')
     inventory_items = db.relationship('InventoryItem', back_populates='character', cascade='all, delete-orphan') 
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'name': self.name,
+            'fear': self.fear,
+            'sanity': self.sanity,
+            'created_at': self.created_at.isoformat()
+        }
+
+    @staticmethod
+    def create_random(user_id, name="Default Name"):
+        import random
+        return Character(
+            user_id=user_id,
+            name=name,
+            fear=random.randint(0, 10),
+            sanity=random.randint(80, 100)
+        )

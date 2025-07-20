@@ -8,3 +8,12 @@ class Scene(db.Model):
     description = db.Column(db.Text)
     options = db.Column(db.JSON)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'stage': self.stage,
+            'description': self.description,
+            'options': self.options,
+            'created_at': self.created_at.isoformat()
+        }

@@ -3,9 +3,12 @@ from app import db
 from app.models.user import User
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import create_access_token
+from app.models.character import Character
+from flask_cors import CORS
 
 bcrypt = Bcrypt()
 auth_bp = Blueprint('auth', __name__)
+
 
 @auth_bp.route('/signup', methods=['POST'])
 def signup():
@@ -21,7 +24,13 @@ def signup():
     user = User(email=email, username=username, password_hash=pw_hash)
     db.session.add(user)
     db.session.commit()
-    return jsonify({'msg': 'User created successfully'}), 201
+
+    # Create a character with random stats for the new user
+    character = Character.create_random(user_id=user.id)
+    db.session.add(character)
+    db.session.commit()
+
+    return jsonify({'msg': 'User and character created successfully'}), 201
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
@@ -33,5 +42,5 @@ def login():
     user = User.query.filter_by(email=email).first()
     if not user or not bcrypt.check_password_hash(user.password_hash, password):
         return jsonify({'msg': 'Invalid credentials'}), 401
-    access_token = create_access_token(identity=user.id)
+    access_token = create_access_token(identity=str(user.id))
     return jsonify({'access_token': access_token, 'user_id': user.id, 'username': user.username}), 200

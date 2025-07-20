@@ -11,3 +11,13 @@ class InventoryItem(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     character = db.relationship('Character', back_populates='inventory_items')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'character_id': self.character_id,
+            'item_name': self.item_name,
+            'description': self.description,
+            'used': self.used,
+            'created_at': self.created_at.isoformat()
+        }

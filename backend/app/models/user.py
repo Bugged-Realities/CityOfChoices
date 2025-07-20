@@ -9,3 +9,11 @@ class User(db.Model):
     password_hash = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     character = db.relationship('Character', back_populates='user', uselist=False)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'username': self.username,
+            'created_at': self.created_at.isoformat()
+        }
