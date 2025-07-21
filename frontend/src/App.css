@@ -1,0 +1,612 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+html,
+body {
+  background: #3b1124;
+  color: #e8d09c;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-family: Arial, sans-serif;
+  scroll-behavior: smooth;
+  /* Subtle pixel-art SVG background pattern */
+  background-image: url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" fill="%233B1124"/><rect x="0" y="0" width="8" height="8" fill="%23442F38"/><rect x="16" y="16" width="8" height="8" fill="%23916672"/><rect x="32" y="32" width="8" height="8" fill="%23B8A47E"/></svg>');
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Fixed Header */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  min-width: 100vw;
+  max-width: 100vw;
+  margin: 0;
+  background: #442f38;
+  color: #e8d09c;
+  padding: 1.2rem 2rem 1.2rem 2rem;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 12px 0 rgba(59, 17, 36, 0.12);
+  border-bottom: 3px solid #916672;
+  z-index: 100;
+}
+
+.header-title {
+  color: #b8a47e;
+  font-family: "Press Start 2P", cursive, Arial, sans-serif;
+  font-size: 1.2rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 8px #3b1124aa;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.header-nav button {
+  background: none;
+  border: none;
+  color: #e8d09c;
+  font-family: "Press Start 2P", cursive, Arial, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  cursor: pointer;
+  padding: 0.5rem 1.2rem;
+  transition: color 0.2s, border-bottom 0.2s, background 0.2s;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  letter-spacing: 1px;
+}
+
+.header-nav button:hover,
+.header-nav button:focus {
+  color: #b8a47e;
+  border-bottom: 2px solid #916672;
+  background: #3b1124;
+  outline: none;
+}
+
+/* Add space for fixed header */
+.main-content {
+  margin-top: 90px;
+  padding: 2rem 1rem 2rem 1rem;
+  box-sizing: border-box;
+}
+
+/* Section Styles */
+section,
+.game-overview-section {
+  background: #442f38;
+  border-radius: 1.5rem;
+  margin: 2.5rem auto;
+  max-width: 1100px;
+  box-sizing: border-box;
+  padding: 2.5rem 1.5rem 2.5rem 1.5rem;
+  box-shadow: 0 4px 24px 0 rgba(59, 17, 36, 0.1);
+}
+
+.game-overview-title,
+section h2,
+section h1 {
+  color: #b8a47e;
+  font-family: "Press Start 2P", cursive, Arial, sans-serif;
+  font-size: 1.3rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  letter-spacing: 2px;
+}
+
+.game-overview-desc,
+section p {
+  color: #e8d09c;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: Arial, sans-serif;
+}
+
+.features-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: #3b1124;
+  border-radius: 12px;
+  padding: 1.5rem 1.5rem 1.25rem 1.5rem;
+  color: #e8d09c;
+  display: flex;
+  align-items: flex-start;
+  box-shadow: 0 2px 12px 0 rgba(68, 47, 56, 0.1);
+  transition: transform 0.18s cubic-bezier(0.4, 2, 0.6, 1), box-shadow 0.18s,
+    border 0.18s, background 0.18s;
+  border: 2px solid #916672;
+  min-width: 0;
+}
+
+.feature-card:hover,
+.feature-card:focus {
+  transform: scale(1.04);
+  border: 2px solid #b8a47e;
+  box-shadow: 0 4px 24px 0 #91667255;
+  background: #442f38;
+  outline: none;
+  z-index: 1;
+}
+
+.feature-emoji {
+  font-size: 2rem;
+  margin-right: 1.25rem;
+  flex-shrink: 0;
+  line-height: 1;
+  align-self: flex-start;
+  color: #b8a47e;
+}
+
+.feature-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.feature-title {
+  color: #916672;
+  font-family: "Press Start 2P", cursive, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.4rem;
+  letter-spacing: 1px;
+}
+
+.feature-desc {
+  color: #e8d09c;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.6;
+  font-family: Arial, sans-serif;
+}
+
+button,
+.btn {
+  background: #916672;
+  color: #e8d09c;
+  border: 2px solid #b8a47e;
+  border-radius: 8px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  font-family: "Press Start 2P", cursive, Arial, sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0.5rem 0;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s, border 0.18s;
+  box-shadow: 0 2px 8px 0 rgba(59, 17, 36, 0.1);
+}
+
+button:hover,
+.btn:hover,
+button:focus,
+.btn:focus {
+  background: #b8a47e;
+  color: #442f38;
+  border: 2px solid #916672;
+  box-shadow: 0 4px 16px 0 #91667244;
+  outline: none;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  background: #3b1124;
+}
+::-webkit-scrollbar-thumb {
+  background: #916672;
+  border-radius: 8px;
+}
+
+.game-overview-section {
+  margin-top: 3.5rem;
+}
+
+.centered-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 60vh;
+  margin-top: 5rem;
+  margin-bottom: 3rem;
+}
+
+.howitworks-section {
+  background: #3b1124;
+  border-radius: 1.5rem;
+  margin: 2.5rem auto;
+  max-width: 900px;
+  box-sizing: border-box;
+  padding: 2.5rem 1.5rem 2.5rem 1.5rem;
+  box-shadow: 0 4px 24px 0 rgba(59, 17, 36, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.howitworks-title {
+  color: #e8d09c;
+  font-family: "Press Start 2P", cursive, Arial, sans-serif;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+  letter-spacing: 2px;
+}
+
+.howitworks-steps {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 700px;
+}
+
+.howitworks-step {
+  background: #442f38;
+  border-radius: 12px;
+  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+  color: #e8d09c;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-shadow: 0 2px 12px 0 rgba(68, 47, 56, 0.1);
+  transition: transform 0.18s cubic-bezier(0.4, 2, 0.6, 1), box-shadow 0.18s,
+    outline 0.18s;
+  outline: 2px solid transparent;
+  cursor: pointer;
+}
+
+.howitworks-step:focus {
+  outline: 2px solid #b8a47e;
+  outline-offset: 2px;
+}
+
+.howitworks-step:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 24px 0 #91667288;
+  outline: 2px solid #916672;
+  outline-offset: 2px;
+}
+
+.howitworks-icon {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  color: #b8a47e;
+  font-family: "Press Start 2P", cursive, Arial, sans-serif;
+  align-self: center;
+  display: block;
+}
+
+.howitworks-step-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.howitworks-step-title {
+  color: #b8a47e;
+  font-family: "Press Start 2P", cursive, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+  letter-spacing: 1px;
+}
+
+.howitworks-step-desc {
+  color: #e8d09c;
+  font-size: 0.95rem;
+  font-family: Arial, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.footer {
+  width: 100%;
+  background: #3b1124;
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  box-sizing: border-box;
+  border-top: 3px solid #442f38;
+  box-shadow: 0 -4px 24px 0 #442f3833;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.game-name {
+  color: #b8a47e;
+  font-family: "Press Start 2P", "VT323", monospace, Arial, sans-serif;
+  font-size: 1.1rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-bottom: 0.2rem;
+}
+
+.footer-tagline {
+  color: #e8d09c;
+  font-size: 0.95rem;
+  font-family: Arial, sans-serif;
+  opacity: 0.95;
+}
+
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.footer-link {
+  color: #b8a47e;
+  font-family: "Press Start 2P", "VT323", monospace, Arial, sans-serif;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-decoration: none;
+  transition: color 0.18s, text-decoration 0.18s;
+  cursor: pointer;
+}
+
+.footer-link:hover,
+.footer-link:focus {
+  color: #916672;
+  text-decoration: underline;
+  outline: none;
+}
+
+.footer-version {
+  color: #e8d09c;
+  font-size: 0.85rem;
+  font-family: Arial, sans-serif;
+  opacity: 0.8;
+}
+
+.login-page-bg {
+  min-height: 100vh;
+  width: 100vw;
+  background: #3b1124;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.login-form-container {
+  background: #442f38;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px 0 #3b112455;
+  padding: 2.5rem 2rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 320px;
+  max-width: 350px;
+  width: 100%;
+  margin: 2rem 0;
+}
+
+.login-title {
+  color: #b8a47e;
+  font-family: "VT323", "Press Start 2P", monospace, Arial, sans-serif;
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.login-input {
+  width: 100%;
+  max-width: 300px;
+  background: #3b1124;
+  color: #e8d09c;
+  border: 2px solid #916672;
+  border-radius: 6px;
+  font-family: "VT323", "Press Start 2P", monospace, Arial, sans-serif;
+  font-size: 1.1rem;
+  padding: 0.7rem 1rem;
+  margin-bottom: 0.2rem;
+  transition: border 0.18s, box-shadow 0.18s;
+  outline: none;
+}
+
+.login-input:focus {
+  border: 2.5px solid #b8a47e;
+  box-shadow: 0 0 0 2px #91667255;
+  background: #442f38;
+}
+
+.login-btn {
+  width: 100%;
+  max-width: 300px;
+  background: #b8a47e;
+  color: #3b1124;
+  font-family: "VT323", "Press Start 2P", monospace, Arial, sans-serif;
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border: none;
+  border-radius: 6px;
+  padding: 0.8rem 0;
+  margin-top: 0.5rem;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, transform 0.18s;
+  box-shadow: 0 2px 8px 0 #3b112433;
+}
+
+.login-btn:hover,
+.login-btn:focus {
+  background: #e8d09c;
+  color: #442f38;
+  transform: scale(1.03);
+  outline: none;
+}
+
+.login-error {
+  color: #e05219;
+  background: #442f38;
+  font-family: "Press Start 2P", "VT323", monospace, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: bold;
+  border: 2px solid #e05219;
+  border-radius: 6px;
+  padding: 0.7rem 1rem;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 900px) {
+  .features-list {
+    grid-template-columns: 1fr;
+  }
+  .howitworks-steps {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1.2rem 1rem;
+  }
+  .header-title {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .header-nav {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+  .main-content {
+    margin-top: 120px;
+    padding: 1rem 0.5rem 1.5rem 0.5rem;
+  }
+  section,
+  .game-overview-section {
+    padding: 1.5rem 0.5rem 1.5rem 0.5rem;
+    border-radius: 0.75rem;
+  }
+  .game-overview-title,
+  section h2,
+  section h1 {
+    font-size: 1rem;
+  }
+  .features-list {
+    gap: 1rem;
+    max-width: 100%;
+  }
+  .feature-card {
+    padding: 1.25rem 1rem 1rem 1rem;
+  }
+  .feature-emoji {
+    margin-right: 1rem;
+    font-size: 1.7rem;
+  }
+  .howitworks-section {
+    padding: 1.5rem 0.5rem 1.5rem 0.5rem;
+    border-radius: 0.75rem;
+  }
+  .howitworks-title {
+    font-size: 1rem;
+  }
+  .howitworks-step {
+    padding: 1.1rem 0.7rem 1rem 0.7rem;
+  }
+  .howitworks-icon {
+    font-size: 1.4rem;
+    margin-bottom: 0.7rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .footer {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 0.5rem 1.2rem 0.5rem;
+    text-align: center;
+  }
+  .footer-left,
+  .footer-right {
+    align-items: center;
+    text-align: center;
+  }
+  .footer-links {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .login-form-container {
+    min-width: 0;
+    max-width: 98vw;
+    padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+  }
+  .login-title {
+    font-size: 1.3rem;
+  }
+  .login-btn,
+  .login-input {
+    font-size: 1rem;
+    padding: 0.6rem 0.5rem;
+  }
+}

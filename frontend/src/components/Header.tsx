@@ -1,23 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const HeaderSection: React.FC = () => {
+const Header: React.FC = () => {
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // Toggle hamburger menu
+  const toggleMenu = () => setMenuOpen((open) => !open);
+
+  // Close menu on navigation (for accessibility)
+  const handleNav = (path: string) => {
+    navigate(path);
+    setMenuOpen(false);
+  };
+
   return (
-    <section className="header-section">
-      <div className="header-content">
-        <h1>
-          <span>City of Choices</span>
-        </h1>
-        <p>One wrong train. One twisted world. Every choice counts.</p>
-      </div>
-      <div className="header-buttons">
-        <button>Start Adventure</button>
-        <button onClick={() => navigate("/login")}>Log In</button>
-        <button onClick={() => navigate("/register")}>Register</button>
-      </div>
-    </section>
+    <header className="header">
+      <div className="header-title">City Of Choices</div>
+      <nav className="header-nav" aria-label="Main navigation">
+        <button onClick={() => handleNav("/")}>Home</button>
+        <button onClick={() => handleNav("/login")}>Login</button>
+        <button onClick={() => handleNav("/register")}>Sign-up</button>
+      </nav>
+    </header>
   );
 };
 
-export default HeaderSection;
+export default Header;

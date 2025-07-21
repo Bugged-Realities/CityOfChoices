@@ -1,74 +1,84 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
-function SignupPage() {
-  const [form, setForm] = useState({ email: "", username: "", password: "" });
-  const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+const SignupPage: React.FC = () => {
+  const [error, setError] = useState("");
+  const [form, setForm] = useState({ username: "", email: "", password: "" });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSignup = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    // Signup
-    const signupRes = await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-    if (!signupRes.ok) {
-      setError("Signup failed");
-      return;
+    // Dummy validation for demonstration
+    if (!form.username || !form.email || !form.password) {
+      setError("All fields are required.");
+    } else {
+      setError("");
+      // Handle signup logic here
     }
-    // Auto-login
-    const loginRes = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: form.email, password: form.password }),
-    });
-    if (!loginRes.ok) {
-      setError("Login failed");
-      return;
-    }
-    const loginData = await loginRes.json();
-    localStorage.setItem("token", loginData.access_token);
-    navigate("/character");
   };
 
   return (
-    <div>
-      <h1>Sign Up</h1>
-      <form onSubmit={handleSignup}>
-        <input
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-        />
-        <br />
-        <input
-          name="username"
-          placeholder="Username"
-          value={form.username}
-          onChange={handleChange}
-        />
-        <br />
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-        />
-        <br />
-        <button type="submit">Sign Up</button>
-      </form>
-      {error && <div>Error: {error}</div>}
-    </div>
+    <>
+      <Header />
+      <div className="login-page-bg">
+        <div className="login-form-container">
+          <h1 className="login-title">Sign Up</h1>
+          {error && (
+            <div className="login-error" role="alert">
+              {error}
+            </div>
+          )}
+          <form
+            className="login-form"
+            onSubmit={handleSubmit}
+            aria-label="Sign up form"
+          >
+            <input
+              className="login-input"
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={form.username}
+              onChange={handleChange}
+              aria-label="Username"
+              autoComplete="username"
+              required
+            />
+            <input
+              className="login-input"
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={form.email}
+              onChange={handleChange}
+              aria-label="Email"
+              autoComplete="email"
+              required
+            />
+            <input
+              className="login-input"
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={form.password}
+              onChange={handleChange}
+              aria-label="Password"
+              autoComplete="new-password"
+              required
+            />
+            <button className="login-btn" type="submit">
+              Sign Up
+            </button>
+          </form>
+        </div>
+      </div>
+      <Footer />
+    </>
   );
-}
+};
 
 export default SignupPage;

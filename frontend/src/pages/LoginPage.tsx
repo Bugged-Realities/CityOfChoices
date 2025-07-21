@@ -1,75 +1,73 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
-function LoginPage() {
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+const LoginPage: React.FC = () => {
+  const [error, setError] = useState("");
+  const [form, setForm] = useState({ username: "", password: "" });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    console.log("Attempting login with:", form);
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      console.log("Login request sent to /api/auth/login");
-      console.log("Response status:", res.status);
-      let data;
-      try {
-        data = await res.clone().json();
-        console.log("Response JSON:", data);
-      } catch (jsonErr) {
-        const text = await res.text();
-        console.log("Response not JSON, raw text:", text);
-      }
-      if (!res.ok) {
-        setError("Login failed");
-        return;
-      }
-      if (data && data.access_token) {
-        localStorage.setItem("token", data.access_token);
-        navigate("/game");
-      } else {
-        setError("No access token in response");
-      }
-    } catch (err) {
-      console.error("Login error:", err);
-      setError("Login failed: " + err);
+    // Dummy validation for demonstration
+    if (!form.username || !form.password) {
+      setError("Username and password are required.");
+    } else {
+      setError("");
+      // Handle login logic here
     }
   };
 
   return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <input
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-        />
-        <br />
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-        />
-        <br />
-        <button type="submit">Login</button>
-      </form>
-      {error && <div>Error: {error}</div>}
-    </div>
+    <>
+      <Header />
+      <div className="login-page-bg">
+        <div className="login-form-container">
+          <h1 className="login-title">Login</h1>
+          {error && (
+            <div className="login-error" role="alert">
+              {error}
+            </div>
+          )}
+          <form
+            className="login-form"
+            onSubmit={handleSubmit}
+            aria-label="Login form"
+          >
+            <input
+              className="login-input"
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={form.username}
+              onChange={handleChange}
+              aria-label="Username"
+              autoComplete="username"
+              required
+            />
+            <input
+              className="login-input"
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={form.password}
+              onChange={handleChange}
+              aria-label="Password"
+              autoComplete="current-password"
+              required
+            />
+            <button className="login-btn" type="submit">
+              Log In
+            </button>
+          </form>
+        </div>
+      </div>
+      <Footer />
+    </>
   );
-}
+};
 
 export default LoginPage;

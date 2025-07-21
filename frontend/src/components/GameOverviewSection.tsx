@@ -13,7 +13,7 @@ const features = [
   },
   {
     icon: "💾",
-    title: "Auto-Save Progress",
+    title: "Save Progress",
     desc: "Jump back in anytime—your journey is always remembered.",
   },
   {
@@ -25,26 +25,28 @@ const features = [
 
 const GameOverviewSection: React.FC = () => {
   return (
-    <section>
+    <section className="game-overview">
       <div>
         {/* Story description and features */}
         <div>
-          <h2>Welcome to Bugged Realities</h2>
-          <p>
+          <h2 className="game-overview-title">
+            Welcome to the City of Choices
+          </h2>
+          <p className="game-overview-desc">
             Board the wrong NYC subway train and find yourself trapped in a
             surreal, pixel-art world. Navigate strange tunnels, meet bizarre
             characters, and make choices that shape your fate. Will you escape,
             or become part of the underground?
           </p>
-          <ul>
+          <ul className="features-list">
             {features.map((f, i) => (
-              <li key={i}>
-                <span role="img" aria-label={f.title}>
+              <li className="feature-card" key={i} tabIndex={0}>
+                <span className="feature-emoji" role="img" aria-label={f.title}>
                   {f.icon}
                 </span>
-                <div>
-                  <span>{f.title}</span>
-                  <span>{f.desc}</span>
+                <div className="feature-text">
+                  <span className="feature-title">{f.title}</span>
+                  <span className="feature-desc">{f.desc}</span>
                 </div>
               </li>
             ))}

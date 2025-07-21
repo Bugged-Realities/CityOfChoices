@@ -7,7 +7,9 @@ const HomePage = () => {
   return (
     <>
       <HeaderSection />
-      <GameOverviewSection />
+      <div className="centered-section">
+        <GameOverviewSection />
+      </div>
       <HowItWorksSection />
       <Footer />
     </>
