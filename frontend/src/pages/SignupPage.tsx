@@ -1,23 +1,32 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { signup } from "../api/auth";
 
 const SignupPage: React.FC = () => {
   const [error, setError] = useState("");
   const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Dummy validation for demonstration
     if (!form.username || !form.email || !form.password) {
       setError("All fields are required.");
-    } else {
-      setError("");
-      // Handle signup logic here
+      return;
+    }
+    setError("");
+    setLoading(true);
+    try {
+      await signup(form.username, form.email, form.password);
+      window.location.href = "/game";
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -70,8 +79,8 @@ const SignupPage: React.FC = () => {
               autoComplete="new-password"
               required
             />
-            <button className="login-btn" type="submit">
-              Sign Up
+            <button className="login-btn" type="submit" disabled={loading}>
+              {loading ? "Signing up..." : "Sign Up"}
             </button>
           </form>
         </div>

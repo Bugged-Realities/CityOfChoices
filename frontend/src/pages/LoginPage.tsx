@@ -1,23 +1,32 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { login } from "../api/auth";
 
 const LoginPage: React.FC = () => {
   const [error, setError] = useState("");
-  const [form, setForm] = useState({ username: "", password: "" });
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Dummy validation for demonstration
-    if (!form.username || !form.password) {
-      setError("Username and password are required.");
-    } else {
-      setError("");
-      // Handle login logic here
+    if (!form.email || !form.password) {
+      setError("Email and password are required.");
+      return;
+    }
+    setError("");
+    setLoading(true);
+    try {
+      await login(form.email, form.password);
+      window.location.href = "/game";
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -39,13 +48,13 @@ const LoginPage: React.FC = () => {
           >
             <input
               className="login-input"
-              type="text"
-              name="username"
-              placeholder="Username"
-              value={form.username}
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={form.email}
               onChange={handleChange}
-              aria-label="Username"
-              autoComplete="username"
+              aria-label="Email"
+              autoComplete="email"
               required
             />
             <input
@@ -59,8 +68,8 @@ const LoginPage: React.FC = () => {
               autoComplete="current-password"
               required
             />
-            <button className="login-btn" type="submit">
-              Log In
+            <button className="login-btn" type="submit" disabled={loading}>
+              {loading ? "Logging in..." : "Log In"}
             </button>
           </form>
         </div>
