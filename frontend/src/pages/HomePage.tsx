@@ -1,16 +1,14 @@
 import HeaderSection from "../components/Header";
-import GameOverviewSection from "../components/GameOverviewSection";
-import HowItWorksSection from "../components/HowItWorksSection";
 import Footer from "../components/Footer";
+import GameIntroSection from "../components/GameIntroSection";
 
 const HomePage = () => {
   return (
     <>
       <HeaderSection />
       <div className="centered-section">
-        <GameOverviewSection />
+        <GameIntroSection />
       </div>
-      <HowItWorksSection />
       <Footer />
     </>
   );

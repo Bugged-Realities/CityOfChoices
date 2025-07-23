@@ -26,7 +26,7 @@ def signup():
     db.session.commit()
 
     # Create a character with random stats for the new user
-    character = Character.create_random(user_id=user.id)
+    character = Character.create_random(user_id=user.id, name=username)
     db.session.add(character)
     db.session.commit()
 

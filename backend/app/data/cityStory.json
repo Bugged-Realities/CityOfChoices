@@ -1,5 +1,6 @@
-{
-  "start": {
+[
+  {
+    "title": "start",
     "background": "You find yourself on a strange subway train.",
     "prompt": "The lights flicker. Do you stay seated or get up?",
     "choices": [
@@ -7,7 +8,8 @@
       { "text": "Get up", "next": "get_up" }
     ]
   },
-  "stay_seated": {
+  {
+    "title": "stay_seated",
     "background": "The train speeds up.",
     "prompt": "A lizard person sits next to you. Do you talk or stay silent?",
     "choices": [
@@ -15,7 +17,8 @@
       { "text": "Stay silent", "next": "silent_lizard" }
     ]
   },
-  "get_up": {
+  {
+    "title": "get_up",
     "background": "You get up and walk to the front of the train.",
     "prompt": "You see a sign that says 'City Center'. Do you follow it or stay on the train?",
     "choices": [
@@ -23,4 +26,4 @@
       { "text": "Stay on the train", "next": "stay_on_train" }
     ]
   }
-}
+]

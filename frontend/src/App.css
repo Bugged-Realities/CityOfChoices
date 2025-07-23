@@ -1,5 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 html,
 body {
   background: #3b1124;
@@ -12,12 +23,6 @@ body {
   scroll-behavior: smooth;
   /* Subtle pixel-art SVG background pattern */
   background-image: url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" fill="%233B1124"/><rect x="0" y="0" width="8" height="8" fill="%23442F38"/><rect x="16" y="16" width="8" height="8" fill="%23916672"/><rect x="32" y="32" width="8" height="8" fill="%23B8A47E"/></svg>');
-}
-
-#root {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
 /* Fixed Header */
@@ -353,7 +358,7 @@ button:focus,
 .game-name {
   color: #b8a47e;
   font-family: "Press Start 2P", "VT323", monospace, Arial, sans-serif;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: bold;
   letter-spacing: 2px;
   margin-bottom: 0.2rem;
