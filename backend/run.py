@@ -28,6 +28,9 @@ def create_app():
     from app.routes.story_routes import story_bp
     app.register_blueprint(story_bp, url_prefix='/api/story')
 
+    from app.routes.character_routes import inventory_bp
+    app.register_blueprint(inventory_bp, url_prefix='/api/inventory') 
+
     return app
 
 if __name__ == '__main__':

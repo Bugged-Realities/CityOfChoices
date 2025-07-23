@@ -4,8 +4,15 @@
     "background": "You find yourself on a strange subway train.",
     "prompt": "The lights flicker. Do you stay seated or get up?",
     "choices": [
-      { "text": "Stay seated", "next": "stay_seated" },
-      { "text": "Get up", "next": "get_up" }
+      {
+        "text": "Stay seated",
+        "next": "stay_seated",
+        "reward": "Glowing Scale"
+      },
+      {
+        "text": "Get up",
+        "next": "get_up"
+      }
     ]
   },
   {
@@ -13,8 +20,15 @@
     "background": "The train speeds up.",
     "prompt": "A lizard person sits next to you. Do you talk or stay silent?",
     "choices": [
-      { "text": "Talk", "next": "talk_lizard" },
-      { "text": "Stay silent", "next": "silent_lizard" }
+      {
+        "text": "Talk",
+        "next": "talk_lizard",
+        "reward": "Lizard Amulet"
+      },
+      {
+        "text": "Stay silent",
+        "next": "silent_lizard"
+      }
     ]
   },
   {
@@ -22,8 +36,103 @@
     "background": "You get up and walk to the front of the train.",
     "prompt": "You see a sign that says 'City Center'. Do you follow it or stay on the train?",
     "choices": [
-      { "text": "Follow the sign", "next": "follow_sign" },
-      { "text": "Stay on the train", "next": "stay_on_train" }
+      {
+        "text": "Follow the sign",
+        "next": "follow_sign"
+      },
+      {
+        "text": "Stay on the train",
+        "next": "stay_on_train"
+      }
     ]
+  },
+  {
+    "title": "talk_lizard",
+    "background": "The lizard person gives you a mysterious key.",
+    "prompt": "Do you accept the key?",
+    "choices": [
+      {
+        "text": "Accept the key",
+        "next": "key_accepted",
+        "reward": "Mysterious Key"
+      },
+      {
+        "text": "Refuse",
+        "next": "ending"
+      }
+    ]
+  },
+  {
+    "title": "silent_lizard",
+    "background": "The lizard person looks disappointed and leaves.",
+    "prompt": "You feel a sense of missed opportunity.",
+    "choices": [
+      {
+        "text": "Continue",
+        "next": "ending"
+      }
+    ]
+  },
+  {
+    "title": "follow_sign",
+    "background": "You follow the sign and find a locked door.",
+    "prompt": "Do you want to use your Mysterious Key to open it?",
+    "choices": [
+      {
+        "text": "Use Mysterious Key",
+        "next": "door_opened",
+        "consume_item": true,
+        "required_item": "Mysterious Key"
+      },
+      {
+        "text": "Turn back",
+        "next": "ending"
+      }
+    ]
+  },
+  {
+    "title": "stay_on_train",
+    "background": "The train speeds into darkness.",
+    "prompt": "You wonder what you missed.",
+    "choices": [
+      {
+        "text": "Accept your fate",
+        "next": "ending"
+      }
+    ]
+  },
+  {
+    "title": "key_accepted",
+    "background": "You now have the Mysterious Key.",
+    "prompt": "You see a locked door ahead.",
+    "choices": [
+      {
+        "text": "Try the key on the door",
+        "next": "door_opened",
+        "consume_item": true,
+        "required_item": "Mysterious Key"
+      },
+      {
+        "text": "Ignore the door",
+        "next": "ending"
+      }
+    ]
+  },
+  {
+    "title": "door_opened",
+    "background": "The key fits! The door opens to a bright new world.",
+    "prompt": "You step through and feel a sense of accomplishment.",
+    "choices": [
+      {
+        "text": "Finish",
+        "next": "ending"
+      }
+    ]
+  },
+  {
+    "title": "ending",
+    "background": "You reach the end of your journey.",
+    "prompt": "Congratulations! You have completed the story.",
+    "choices": []
   }
 ]
