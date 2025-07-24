@@ -45,7 +45,7 @@
   },
   {
     "stage": "start_depths",
-    "description": "You awaken in the reality-warping Depths where gravity flows sideways and your thoughts echo as visible colors in the air. Everything here defies logic.",
+    "description": "You awaken in the reality-warping Depths where gravity flows sideways and your thoughts echo as visible colors in the air.",
     "options": [
       {
         "text": "Follow your colorful thoughts to their source",
@@ -96,401 +96,149 @@
   },
   {
     "stage": "conductor_meeting",
-    "description": "The conductor's multiple eyes blink in sequence, creating a hypnotic pattern. It speaks in harmonious whispers about payment for passage.",
+    "description": "The conductor whispers riddles in ancient tongues. He stamps your hand with a mark that glows briefly.",
     "options": [
-      {
-        "text": "Offer a cherished memory as payment",
-        "next": "memory_trade",
-        "stat_changes": { "sanity": -2 },
-        "reward": "Memory Echo"
-      },
-      {
-        "text": "Offer your fear as currency",
-        "next": "fear_trade",
-        "stat_changes": { "fear": -3, "sanity": 1 }
-      },
-      {
-        "text": "Refuse to pay and demand free passage",
-        "next": "conductor_confrontation",
-        "stat_changes": { "fear": 2 }
-      }
+      { "text": "Thank him and sit back down", "next": "subway_sleeping" },
+      { "text": "Ask where the train is going", "next": "deep_journey" }
     ]
   },
   {
     "stage": "wall_encounter",
-    "description": "The breathing wall embraces you with warm, pulsing flesh. It whispers ancient secrets about the lizard kingdom's weaknesses and hidden passages.",
+    "description": "The wall shivers, revealing a secret panel. Inside is a small crystal sphere humming with power.",
     "options": [
       {
-        "text": "Listen to all the wall's secrets",
-        "next": "secret_knowledge",
-        "reward": "Secret Knowledge",
-        "stat_changes": { "sanity": -2, "fear": -1 }
+        "text": "Take the sphere and rejoin the car",
+        "next": "subway_sleeping",
+        "reward": "Crystal Shard"
       },
+      { "text": "Climb through the panel", "next": "crystal_city_entrance" }
+    ]
+  },
+  {
+    "stage": "lizard_observation",
+    "description": "You watch as the lizards vote in a council meeting using thought projections. A clerk notices you.",
+    "options": [
+      { "text": "Introduce yourself", "next": "crystal_exploration" },
       {
-        "text": "Break free from the wall's embrace",
-        "next": "wall_escape",
-        "stat_changes": { "fear": 1, "sanity": 1 }
+        "text": "Run before they see too much",
+        "next": "human_search",
+        "stat_changes": { "fear": 1 }
+      }
+    ]
+  },
+  {
+    "stage": "crystal_exploration",
+    "description": "Inside the buildings, you find light-powered elevators and memory archives encoded in glowing tiles.",
+    "options": [
+      {
+        "text": "Use your Crystal Shard on an archive",
+        "next": "scale_visions",
+        "required_item": "Crystal Shard"
+      },
+      { "text": "Leave and find other humans", "next": "human_search" }
+    ]
+  },
+  {
+    "stage": "human_search",
+    "description": "You find graffiti: 'WE ESCAPED. FIND THE FRACTURE.' A strange pulse guides you toward the subway again.",
+    "options": [
+      { "text": "Follow the pulse to the depths", "next": "start_depths" },
+      {
+        "text": "Ignore it and try blending into the lizard society",
+        "next": "lizard_observation"
+      }
+    ]
+  },
+  {
+    "stage": "thought_trail",
+    "description": "Your thoughts lead to a mirror that reflects you as a lizard-hybrid. It offers you a forked staff.",
+    "options": [
+      {
+        "text": "Take the staff and continue",
+        "next": "chaos_acceptance",
+        "reward": "Chaos Fragment"
+      },
+      { "text": "Smash the mirror and flee", "next": "reality_search" }
+    ]
+  },
+  {
+    "stage": "reality_search",
+    "description": "You find a rusted subway map etched into stone. One stop reads: 'Home (through Fracture)'.",
+    "options": [
+      { "text": "Search for the Fracture", "next": "rift_creation" },
+      {
+        "text": "Give up and lie down",
+        "next": "ending_lost_forever",
+        "stat_changes": { "sanity": -2 }
       }
     ]
   },
   {
     "stage": "crystal_city_entrance",
-    "description": "You step into the crystalline metropolis. A small lizard child approaches, offering you a shimmering fruit that glows with inner light.",
+    "description": "You step into the city again, your mind sharper than before. Something calls you deeper.",
     "options": [
+      { "text": "Search for other humans", "next": "human_search" },
       {
-        "text": "Accept the fruit with gratitude",
-        "next": "lizard_friendship",
-        "reward": "Trust Token",
-        "stat_changes": { "fear": -1 }
-      },
-      {
-        "text": "Politely decline the offering",
-        "next": "neutral_path",
-        "stat_changes": { "sanity": 1 }
-      },
-      {
-        "text": "Run away from the child in fear",
-        "next": "hostile_reception",
-        "stat_changes": { "fear": 2, "sanity": -1 }
-      },
-      {
-        "text": "Use Glowing Scale for protection",
-        "next": "scale_protection",
-        "required_item": "Glowing Scale",
-        "stat_changes": { "fear": -2 }
-      }
-    ],
-    "item_triggers": [
-      {
-        "item": "Glowing Scale",
-        "next": "scale_protection",
-        "message": "The Glowing Scale creates a protective barrier, and the lizard child bows respectfully!"
+        "text": "Explore more crystal structures",
+        "next": "crystal_exploration"
       }
     ]
   },
   {
-    "stage": "lizard_friendship",
-    "background": "The fruit tastes like liquid starlight. The lizard child leads you through crystal corridors to the royal palace.",
+    "stage": "scale_visions",
+    "description": "Visions flood your mind: an underground fractal tear in reality connecting all worlds.",
     "options": [
-      {
-        "text": "Ask to serve as a diplomat",
-        "next": "diplomat_role",
-        "stat_changes": { "sanity": 2 }
-      },
-      {
-        "text": "Request permission to explore the depths",
-        "next": "royal_depths_access",
-        "reward": "Royal Blessing"
-      },
-      {
-        "text": "Challenge customs to prove your worth",
-        "next": "proving_trial",
-        "stat_changes": { "fear": 1, "sanity": -1 }
-      }
+      { "text": "Follow the vision to the Fracture", "next": "rift_creation" },
+      { "text": "Collapse in awe", "next": "ending_lost_forever" }
     ]
   },
   {
-    "stage": "hostile_reception",
-    "description": "Crystal-speared guards surround you. The city's harmony turns discordant as citizens hiss disapprovingly. You're brought before the Lizard King as a threat.",
+    "stage": "deep_journey",
+    "description": "The train takes you beyond maps. The car empties. A door opens to endless stars and singing data.",
     "options": [
+      { "text": "Walk into the void", "next": "ending_lost_forever" },
       {
-        "text": "Apologize and explain your fear",
-        "next": "humble_apology",
-        "stat_changes": { "fear": -1, "sanity": 1 }
-      },
-      {
-        "text": "Stand defiant against their judgment",
-        "next": "defiant_stand",
-        "stat_changes": { "fear": -2, "sanity": -2 }
-      },
-      {
-        "text": "Offer Secret Knowledge as tribute",
-        "next": "knowledge_offering",
-        "required_item": "Secret Knowledge",
-        "stat_changes": { "fear": -3 }
-      }
-    ],
-    "item_triggers": [
-      {
-        "item": "Secret Knowledge",
-        "next": "knowledge_offering",
-        "message": "Your Secret Knowledge transforms the King's anger into curious respect!"
-      }
-    ]
-  },
-  {
-    "stage": "royal_depths_access",
-    "description": "With the Royal Blessing glowing on your forehead, you descend through crystal elevators into the reality-warping Depths.",
-    "options": [
-      {
-        "text": "Follow the color-thoughts to their source",
-        "next": "thought_realm",
-        "stat_changes": { "sanity": -2 }
-      },
-      {
-        "text": "Maintain logical thinking despite chaos",
-        "next": "logic_anchor",
-        "stat_changes": { "sanity": 2, "fear": 1 }
-      },
-      {
-        "text": "Use Royal Blessing for protection",
-        "next": "blessed_journey",
-        "required_item": "Royal Blessing"
-      }
-    ],
-    "item_triggers": [
-      {
-        "item": "Royal Blessing",
-        "next": "blessed_journey",
-        "message": "The Royal Blessing creates a bubble of stability in the chaotic Depths!"
-      }
-    ]
-  },
-  {
-    "stage": "thought_realm",
-    "description": "Your consciousness expands into a realm where thoughts have physical form. A version of yourself made of pure light approaches, claiming to be your true self.",
-    "options": [
-      {
-        "text": "Merge with your light-self",
-        "next": "consciousness_merge",
-        "stat_changes": { "sanity": 3, "fear": -4 }
-      },
-      {
-        "text": "Fight against your light-self",
-        "next": "inner_conflict",
-        "stat_changes": { "fear": 2, "sanity": -1 }
-      },
-      {
-        "text": "Question the light-self's claims",
-        "next": "truth_seeking",
-        "stat_changes": { "sanity": 1 }
-      }
-    ]
-  },
-  {
-    "stage": "consciousness_merge",
-    "description": "You and your light-self become whole. Memories flood back - you were always a traveler between realities. Three paths to different destinies reveal themselves.",
-    "options": [
-      {
-        "text": "Return to help the lizard people",
-        "next": "ending_savior",
-        "stat_changes": { "sanity": 2 }
-      },
-      {
-        "text": "Seek the original subway exit",
-        "next": "ending_transcendent",
-        "stat_changes": { "fear": -2 }
-      },
-      {
-        "text": "Open a path to other realities",
-        "next": "reality_gateway",
-        "reward": "Reality Key"
+        "text": "Jump off at the last visible station",
+        "next": "crystal_city_entrance"
       }
     ]
   },
   {
     "stage": "chaos_acceptance",
-    "description": "You become one with the Depths' impossible logic. Time flows backwards, you speak in colors, and gravity obeys your emotions.",
+    "description": "You dissolve your sense of self. The Chaos Fragment pulses as your body flickers like static.",
     "options": [
       {
-        "text": "Enter the door made of crystallized screams",
-        "next": "scream_passage",
-        "stat_changes": { "fear": 3 }
+        "text": "Let go completely and become part of the Depths",
+        "next": "ending_lost_forever",
+        "stat_changes": { "sanity": -3 }
       },
       {
-        "text": "Take the path to 'The Beginning's End'",
-        "next": "temporal_loop",
-        "stat_changes": { "sanity": -2 }
-      },
-      {
-        "text": "Create your own door using chaos magic",
-        "next": "chaos_creation",
-        "reward": "Chaos Key"
+        "text": "Use the Chaos Fragment to reshape your surroundings",
+        "next": "rift_creation",
+        "required_item": "Chaos Fragment"
       }
     ]
   },
   {
-    "stage": "scream_passage",
-    "description": "The door's screams harmonize into liberation songs. You emerge in a reversed crystal city where lizard people are visitors and humans rule.",
+    "stage": "rift_creation",
+    "description": "You stand at the intersection of crystal logic and chaotic thought. Vision and Chaos fragments hum.",
     "options": [
       {
-        "text": "Accept your role as the prophesied Traveler",
-        "next": "ending_prophet",
-        "stat_changes": { "sanity": 1, "fear": -3 }
+        "text": "Combine the fragments and step through",
+        "next": "ending_homebound",
+        "required_items": ["Vision Fragment", "Chaos Fragment"]
       },
-      {
-        "text": "Reject the prophecy and seek home",
-        "next": "ending_guardian",
-        "stat_changes": { "fear": 1 }
-      },
-      {
-        "text": "Try to unite both realities",
-        "next": "reality_unification",
-        "required_item": "Vision Fragment"
-      }
-    ],
-    "item_triggers": [
-      {
-        "item": "Vision Fragment",
-        "next": "reality_unification",
-        "message": "The Vision Fragment shows you how to merge realities into perfect harmony!"
-      }
+      { "text": "Hesitate and turn back", "next": "chaos_acceptance" }
     ]
   },
   {
-    "stage": "chaos_creation",
-    "description": "Your chaos door opens to a nexus between all possible realities. The Chaos Key pulses with infinite potential.",
-    "options": [
-      {
-        "text": "Choose a reality where you never boarded the train",
-        "next": "ending_reset"
-      },
-      {
-        "text": "Enter a reality where you rule as Lizard King",
-        "next": "ending_king"
-      },
-      {
-        "text": "Forge a new reality combining the best elements",
-        "next": "ending_creator"
-      }
-    ]
-  },
-  {
-    "stage": "knowledge_offering",
-    "description": "Your Secret Knowledge reveals the King's hidden vulnerabilities, but transforms into wisdom about leadership and compassion.",
-    "options": [
-      {
-        "text": "Offer to help free the King from his burdens",
-        "next": "royal_alliance",
-        "stat_changes": { "sanity": 3, "fear": -2 }
-      },
-      {
-        "text": "Negotiate for human prisoner releases",
-        "next": "diplomatic_solution",
-        "stat_changes": { "fear": 1 }
-      },
-      {
-        "text": "Use the knowledge to claim the throne",
-        "next": "throne_usurpation",
-        "stat_changes": { "sanity": -2, "fear": -3 }
-      }
-    ]
-  },
-  {
-    "stage": "royal_alliance",
-    "description": "The Lizard King reveals his court has been corrupted by entities from the Depths. Together, you plan to restore balance.",
-    "options": [
-      {
-        "text": "Accept the Crown of Truth to rule together",
-        "next": "ending_co_ruler",
-        "reward": "Crown of Truth"
-      },
-      {
-        "text": "Take the Sword of Banishment to cleanse the Depths",
-        "next": "purification_mission",
-        "reward": "Sword of Banishment"
-      }
-    ]
-  },
-  {
-    "stage": "purification_mission",
-    "description": "Armed with the Sword of Banishment, you descend into the Depths to face the corruption. Malevolent entities writhe in the darkness.",
-    "options": [
-      {
-        "text": "Banish all entities with righteous fury",
-        "next": "ending_purifier",
-        "required_item": "Sword of Banishment"
-      },
-      {
-        "text": "Try to understand the entities first",
-        "next": "entity_communion",
-        "stat_changes": { "sanity": -1, "fear": 2 }
-      }
-    ],
-    "item_triggers": [
-      {
-        "item": "Sword of Banishment",
-        "next": "ending_purifier",
-        "message": "The Sword blazes with purifying light, cleansing the Depths completely!"
-      }
-    ]
-  },
-  {
-    "stage": "reality_gateway",
-    "description": "With the Reality Key, you stand before infinite doorways leading to countless worlds and possibilities.",
-    "options": [
-      {
-        "text": "Enter a world where all beings live in harmony",
-        "next": "ending_unity"
-      },
-      {
-        "text": "Choose to become the eternal guardian of all realities",
-        "next": "ending_guardian"
-      },
-      {
-        "text": "Create a perfect synthesis of all worlds",
-        "next": "ending_creator"
-      }
-    ]
-  },
-  {
-    "stage": "reality_unification",
-    "description": "Using the Vision Fragment's power, you begin merging the human and lizard realities into a single harmonious world.",
-    "options": [
-      {
-        "text": "Complete the unification process",
-        "next": "ending_unity"
-      }
-    ]
-  },
-  {
-    "stage": "ending_savior",
-    "description": "You return to the crystal city with merged consciousness, bringing wisdom and healing to all beings. The Lizard King bows to your enlightened presence, and you establish a new era of understanding between all conscious beings.",
+    "stage": "ending_lost_forever",
+    "description": "You wander deeper into the Depths, surrendering your memories. You become a whisper in the void.",
     "options": []
   },
   {
-    "stage": "ending_transcendent",
-    "description": "You step beyond physical reality, becoming a force of pure consciousness that guides lost travelers. Your essence becomes part of the subway system itself - every flickering light and whispered warning is you, helping others navigate between worlds.",
-    "options": []
-  },
-  {
-    "stage": "ending_prophet",
-    "description": "In the reversed reality, you establish a golden age where humans and lizard people work as equals. Your reign brings unprecedented prosperity, and you are remembered as the Uniter of Worlds across infinite dimensions.",
-    "options": []
-  },
-  {
-    "stage": "ending_king",
-    "description": "You emerge as the new Lizard King in a reality where you were always destined to rule. Your crystalline throne overlooks an empire spanning multiple dimensions, and you rule with perfect balance of human compassion and reptilian wisdom.",
-    "options": []
-  },
-  {
-    "stage": "ending_creator",
-    "description": "With ultimate power, you forge a perfect reality combining the best of all worlds you've experienced. You become its architect-god, forever shaping and improving this reality for all who inhabit it.",
-    "options": []
-  },
-  {
-    "stage": "ending_guardian",
-    "description": "You remain as eternal guardian of the cosmic balance, watching over all realities. You ensure that travelers always have choices, hope, and the chance to find their true path. You are the eternal protector of infinite possibilities.",
-    "options": []
-  },
-  {
-    "stage": "ending_unity",
-    "description": "The barriers between all worlds dissolve under your influence. The crystal city and surface world become one, creating a paradise where all beings thrive together. Your name is carved in both crystal and stone as 'The Great Unifier.'",
-    "options": []
-  },
-  {
-    "stage": "ending_reset",
-    "description": "You step into a reality where you never boarded the strange train. Everything returns to mundane life, but sometimes you catch glimpses of scales in reflections and hear whispers in tunnels. Was it all a dream?",
-    "options": []
-  },
-  {
-    "stage": "ending_co_ruler",
-    "description": "Wearing the Crown of Truth, you rule alongside the Lizard King as equal partners. Your combined human perspective and lizard wisdom creates a golden age of prosperity. Both species thrive under your joint leadership.",
-    "options": []
-  },
-  {
-    "stage": "ending_purifier",
-    "description": "You successfully cleanse the Depths of all malevolent entities, restoring natural balance to reality. The subway system transforms into a network of pure light connecting healed worlds. You become known as the Great Purifier who saved reality itself.",
+    "stage": "ending_homebound",
+    "description": "Using the Vision and Chaos Fragments, you rip a hole back to NYC. But something followed you out.",
     "options": []
   }
 ]

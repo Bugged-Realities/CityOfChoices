@@ -23,3 +23,23 @@ def seed_scenes():
 
 if __name__ == "__main__":
     seed_scenes()
+
+    # Check for missing 'next' stage references
+    print("\nChecking for missing 'next' stage references...")
+    from app.models.scene import Scene
+    from run import create_app
+    app = create_app()
+    with app.app_context():
+        all_scenes = Scene.query.all()
+        all_stages = {scene.stage for scene in all_scenes}
+        missing = set()
+        for scene in all_scenes:
+            for option in (scene.options or []):
+                next_stage = option.get('next')
+                if next_stage and next_stage not in all_stages:
+                    print(f"Missing stage: {next_stage} (referenced from {scene.stage})")
+                    missing.add(next_stage)
+        if not missing:
+            print("No missing stage references found!")
+        else:
+            print("All missing stages:", missing)

@@ -15,7 +15,7 @@ export async function login(email: string, password: string) {
   if (error) throw error;
 
   // Store JWT token if present (backend returns 'access_token')
-  if (data.access_token) {
+  if (data && data.access_token) {
     localStorage.setItem("authToken", data.access_token);
   }
   return data;
@@ -32,8 +32,8 @@ export async function signup(
   );
   if (error) throw error;
 
-  if (data.token) {
-    localStorage.setItem("authToken", data.token);
+  if (data && data.access_token) {
+    localStorage.setItem("authToken", data.access_token);
   }
   return data;
 }

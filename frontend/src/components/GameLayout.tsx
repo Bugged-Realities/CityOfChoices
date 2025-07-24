@@ -15,9 +15,10 @@ import {
 } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 import { fetchInventory } from "../api/storyFetch";
+import SaveLoadControls from "./SaveLoadControls";
 
 // Types for the story nodes
-type Choice = {
+type Option = {
   text: string;
   next: string;
   reward?: string;
@@ -26,14 +27,16 @@ type Choice = {
   required_item?: string;
 };
 type StoryNode = {
-  background: string;
-  prompt: string;
-  choices: Choice[];
+  id: number;
+  stage: string;
+  description: string;
+  options: Option[];
   item_triggers?: Array<{
     item: string;
     next: string;
     message: string;
   }>;
+  created_at?: string;
 };
 
 function GameLayout() {
@@ -64,13 +67,12 @@ function GameLayout() {
 
       // Reset game state
       setGameEnded(false);
-      setCurrentKey("start");
       setError(null);
 
       // Reload story and inventory
       const storyData = await fetchStoryStart();
       setNode(storyData);
-
+      setCurrentKey(storyData.stage); // <-- Move here, after storyData is defined
       const updatedInventory = await fetchInventory(character.id);
       setInventory(updatedInventory);
     } catch (error) {
@@ -108,40 +110,55 @@ function GameLayout() {
     fetchStoryStart()
       .then((data) => {
         setNode(data);
-        setCurrentKey("start");
+        setCurrentKey(data.stage); // Set currentKey to the node's stage
       })
       .catch(() => setError("Failed to load story."));
+  }, []);
+
+  // Clear auth token on page unload
+  useEffect(() => {
+    const handleUnload = () => {
+      localStorage.removeItem("authToken");
+    };
+    window.addEventListener("beforeunload", handleUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleUnload);
+    };
   }, []);
 
   // Handle choice selection
   const handleChoice = async (choiceIndex: number) => {
     try {
+      console.log("POST /api/story/choice", {
+        current: currentKey,
+        choice_index: choiceIndex,
+      });
       const data = await postStoryChoice(currentKey, choiceIndex);
       if (data.error) {
         setError(data.error);
         return;
       }
 
-      const selectedChoice = node?.choices[choiceIndex];
+      const selectedOption = node?.options[choiceIndex];
 
       // If the choice requires an item, check inventory
       if (
-        selectedChoice?.consume_item &&
-        selectedChoice.required_item &&
+        selectedOption?.consume_item &&
+        selectedOption.required_item &&
         character
       ) {
         const hasItem = inventory?.some(
           (item: any) =>
-            item.item_name === selectedChoice.required_item && !item.used
+            item.item_name === selectedOption.required_item && !item.used
         );
         if (!hasItem) {
-          setError(`You need the ${selectedChoice.required_item} to do that!`);
+          setError(`You need the ${selectedOption.required_item} to do that!`);
           return;
         }
         // Mark the item as used
         const itemToUse = inventory.find(
           (item: any) =>
-            item.item_name === selectedChoice.required_item && !item.used
+            item.item_name === selectedOption.required_item && !item.used
         );
         if (itemToUse) {
           await useInventoryItem(character.id, itemToUse.id);
@@ -150,22 +167,23 @@ function GameLayout() {
         }
       }
 
-      if (selectedChoice?.stat_changes && character) {
+      if (selectedOption?.stat_changes && character) {
         const newFear =
-          (character.fear || 0) + (selectedChoice.stat_changes.fear || 0);
+          (character.fear || 0) + (selectedOption.stat_changes.fear + 12 || 0);
         const newSanity =
-          (character.sanity || 0) + (selectedChoice.stat_changes.sanity || 0);
+          (character.sanity || 0) +
+          (selectedOption.stat_changes.sanity - 10 || 0);
         const updatedCharacter = await updateCharacterStats(character.id, {
           fear: newFear,
           sanity: newSanity,
         });
         setCharacter(updatedCharacter);
       }
-      // If the choice has a reward, add it to inventory
-      if (selectedChoice?.reward && character) {
+      // If the option has a reward, add it to inventory
+      if (selectedOption?.reward && character) {
         await postInventoryItem(
           character.id,
-          selectedChoice.reward,
+          selectedOption.reward,
           "Reward from story choice"
         );
         const updatedInventory = await fetchInventory(character.id);
@@ -173,10 +191,10 @@ function GameLayout() {
       }
 
       setNode(data);
-      if (node && node.choices[choiceIndex]) {
-        setCurrentKey(node.choices[choiceIndex].next);
+      if (data && data.stage) {
+        setCurrentKey(data.stage); // Always update currentKey to the new node's stage
       }
-      if (data.title === "ending" && character) {
+      if (data.stage && data.stage.startsWith("ending") && character) {
         await resetInventory(character.id);
         setInventory([]);
         setGameEnded(true);
@@ -218,15 +236,43 @@ function GameLayout() {
     );
   }
 
+  // Helper to get the current game state for saving
+  const getGameState = () => ({
+    current_stage: currentKey,
+    choice_history: character?.choice_history || [],
+    current_stats: { fear: character?.fear, sanity: character?.sanity },
+    inventory_snapshot: inventory || [],
+  });
+
+  // Helper to set the game state from loaded data
+  const setGameState = (data: any) => {
+    if (data.current_stage) setCurrentKey(data.current_stage);
+    if (data.current_stats) {
+      setCharacter((prev: any) => ({
+        ...prev,
+        fear: data.current_stats.fear,
+        sanity: data.current_stats.sanity,
+      }));
+    }
+    if (data.inventory_snapshot) setInventory(data.inventory_snapshot);
+    // Optionally, fetch the node for the loaded stage
+    if (data.current_stage) {
+      fetchStoryNode(data.current_stage).then(setNode);
+    }
+  };
+
   // If there's a node, return the game content
   return (
-    <div>
+    <div className="game-layout-main">
+      <SaveLoadControls
+        getGameState={getGameState}
+        setGameState={setGameState}
+      />
       <div className="character-info">
         <h2>Character Info</h2>
         <p>Name: {character?.name}</p>
         <p>Fear: {character?.fear}</p>
         <p>Sanity: {character?.sanity}</p>
-        <p>Created At: {character?.created_at}</p>
       </div>
       <div className="inventory-info">
         <h2>Inventory</h2>
@@ -306,11 +352,10 @@ function GameLayout() {
       <div className="game-content">
         <h2>Story</h2>
         <div className="story-node">
-          <p>{node?.background}</p>
-          <p>{node?.prompt}</p>
-          {node?.choices.map((choice, idx) => (
+          <p>{node?.description}</p>
+          {(node?.options || []).map((option, idx) => (
             <button key={idx} onClick={() => handleChoice(idx)}>
-              {choice.text}
+              {option.text}
             </button>
           ))}
         </div>

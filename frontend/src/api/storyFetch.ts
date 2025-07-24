@@ -99,3 +99,23 @@ export async function resetInventory(character_id: number) {
   if (error) throw error;
   return data;
 }
+
+export async function saveGameState(gameState: any) {
+  const token = localStorage.getItem("authToken");
+  const [data, error] = await fetchHandler(
+    "/api/game/save",
+    getPostOptions({ ...gameState, token })
+  );
+  if (error) throw error;
+  return data;
+}
+
+export async function loadGameState() {
+  const token = localStorage.getItem("authToken");
+  const [data, error] = await fetchHandler(
+    "/api/game/load",
+    getPostOptions({ token })
+  );
+  if (error) throw error;
+  return data;
+}

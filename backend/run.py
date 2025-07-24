@@ -31,6 +31,9 @@ def create_app():
     from app.routes.character_routes import inventory_bp
     app.register_blueprint(inventory_bp, url_prefix='/api/inventory') 
 
+    from app.routes.game_routes import game_bp
+    app.register_blueprint(game_bp, url_prefix='/api/game')
+
     return app
 
 if __name__ == '__main__':
