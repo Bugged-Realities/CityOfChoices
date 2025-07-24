@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getToken, logout } from "../api/auth";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const isLoggedIn = !!getToken();
+  const isOnGamePage = location.pathname === "/game";
 
   // Toggle hamburger menu
   const toggleMenu = () => setMenuOpen((open) => !open);
@@ -26,6 +28,9 @@ const Header: React.FC = () => {
       <div className="header-title">City Of Choices</div>
       <nav className="header-nav" aria-label="Main navigation">
         <button onClick={() => handleNav("/")}>Home</button>
+        {isLoggedIn && !isOnGamePage && (
+          <button onClick={() => handleNav("/game")}>Back to Game</button>
+        )}
         {isLoggedIn ? (
           <button onClick={handleLogout}>Logout</button>
         ) : (

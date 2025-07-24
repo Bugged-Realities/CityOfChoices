@@ -42,3 +42,34 @@ def make_choice():
             return jsonify({'error': 'Next node not found'}), 404
     except (IndexError, KeyError, TypeError):
         return jsonify({'error': 'Invalid choice'}), 400
+
+@story_bp.route('/use-item', methods=['POST'])
+def use_item_for_story():
+    data = request.get_json()
+    current = data.get('current')
+    item_name = data.get('item_name')
+
+    current_node = find_node(current)
+    if not current_node:
+        return jsonify({'error': 'Invalid current node'}), 400
+
+    # Check if the current node has item-triggered story progression
+    # This would be defined in the story data
+    if current_node.get('item_triggers'):
+        for trigger in current_node['item_triggers']:
+            if trigger['item'] == item_name:
+                next_title = trigger['next']
+                next_node = find_node(next_title)
+                if next_node:
+                    return jsonify({
+                        'node': next_node,
+                        'message': f'Using {item_name} triggered story progression!'
+                    })
+                else:
+                    return jsonify({'error': 'Next node not found'}), 404
+    
+    # If no story progression is triggered, just return success
+    return jsonify({
+        'message': f'{item_name} was used but no story progression was triggered',
+        'current_node': current_node
+    }), 200

@@ -7,6 +7,7 @@ class Scene(db.Model):
     stage = db.Column(db.Text)
     description = db.Column(db.Text)
     options = db.Column(db.JSON)
+    item_triggers = db.Column(db.JSON)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):

@@ -3,6 +3,8 @@ import {
   fetchHandler,
   basicFetchOptions,
   getPostOptions,
+  getPatchOptions,
+  deleteOptions,
 } from "../utils/fetchHelpers";
 
 export async function login(email: string, password: string) {
@@ -36,10 +38,41 @@ export async function signup(
   return data;
 }
 
+// Fetch the character and update the character
 export async function fetchCharacter() {
   const [data, error] = await fetchHandler(
     "/api/character/me",
     basicFetchOptions()
+  );
+  if (error) throw error;
+  return data;
+}
+
+export async function updateCharacterStats(
+  character_id: number,
+  updates: { fear?: number; sanity?: number }
+) {
+  const [data, error] = await fetchHandler(
+    `/api/character/${character_id}`,
+    getPatchOptions(updates)
+  );
+  if (error) throw error;
+  return data;
+}
+
+export async function deleteCharacter(character_id: number) {
+  const [data, error] = await fetchHandler(
+    `/api/character/${character_id}`,
+    deleteOptions
+  );
+  if (error) throw error;
+  return data;
+}
+
+export async function restartCharacter(character_id: number) {
+  const [data, error] = await fetchHandler(
+    `/api/character/${character_id}/restart`,
+    getPostOptions({})
   );
   if (error) throw error;
   return data;

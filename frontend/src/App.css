@@ -25,6 +25,136 @@ body {
   background-image: url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="40" height="40" fill="%233B1124"/><rect x="0" y="0" width="8" height="8" fill="%23442F38"/><rect x="16" y="16" width="8" height="8" fill="%23916672"/><rect x="32" y="32" width="8" height="8" fill="%23B8A47E"/></svg>');
 }
 
+/* Play Game Button */
+.play-game-section {
+  text-align: center;
+  margin: 3rem 0;
+  padding: 2rem;
+}
+
+.play-game-button {
+  background: linear-gradient(135deg, #4caf50, #45a049);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.play-game-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+  background: linear-gradient(135deg, #45a049, #4caf50);
+}
+
+.play-game-button:active {
+  transform: translateY(0);
+}
+
+/* Game Ended Screen */
+.game-ended-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 2rem;
+}
+
+.game-ended-content {
+  background: rgba(68, 47, 56, 0.9);
+  border: 2px solid #e8d09c;
+  border-radius: 12px;
+  padding: 3rem;
+  text-align: center;
+  max-width: 600px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.game-ended-content h2 {
+  color: #4caf50;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.game-ended-content p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  color: #e8d09c;
+}
+
+.final-stats {
+  background: rgba(59, 17, 36, 0.8);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  border: 1px solid #916672;
+}
+
+.final-stats h3 {
+  color: #b8a47e;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.final-stats p {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.restart-options {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.restart-button,
+.home-button {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+}
+
+.restart-button {
+  background: linear-gradient(135deg, #4caf50, #45a049);
+  color: white;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.restart-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+  background: linear-gradient(135deg, #45a049, #4caf50);
+}
+
+.home-button {
+  background: linear-gradient(135deg, #2196f3, #1976d2);
+  color: white;
+  box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+}
+
+.home-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+  background: linear-gradient(135deg, #1976d2, #2196f3);
+}
+
+.restart-button:active,
+.home-button:active {
+  transform: translateY(0);
+}
+
 /* Fixed Header */
 .header {
   position: fixed;
