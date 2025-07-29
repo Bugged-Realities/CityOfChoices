@@ -5,7 +5,7 @@ import { login } from "../api/auth";
 
 const LoginPage: React.FC = () => {
   const [error, setError] = useState("");
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ username: "", password: "" });
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -14,14 +14,14 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.email || !form.password) {
-      setError("Email and password are required.");
+    if (!form.username || !form.password) {
+      setError("Username and password are required.");
       return;
     }
     setError("");
     setLoading(true);
     try {
-      await login(form.email, form.password);
+      await login(form.username, form.password);
       window.location.href = "/game";
     } catch (err: any) {
       setError(err.message);
@@ -48,13 +48,13 @@ const LoginPage: React.FC = () => {
           >
             <input
               className="login-input"
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={form.email}
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={form.username}
               onChange={handleChange}
-              aria-label="Email"
-              autoComplete="email"
+              aria-label="Username"
+              autoComplete="username"
               required
             />
             <input

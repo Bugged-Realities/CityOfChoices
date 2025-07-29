@@ -3,23 +3,14 @@ import {
   fetchHandler,
   basicFetchOptions,
   getPostOptions,
+  getPutOptions,
   deleteOptions,
 } from "../utils/fetchHelpers";
 
 export async function fetchStoryStart() {
   const [data, error] = await fetchHandler(
-    "/api/story/start",
-    basicFetchOptions
-  );
-  if (error) throw error;
-  return data;
-}
-
-// Fetch a story node by key
-export async function fetchStoryNode(key: string) {
-  const [data, error] = await fetchHandler(
-    `/api/story/${key}`,
-    basicFetchOptions
+    "/api/game/start",
+    getPostOptions({})
   );
   if (error) throw error;
   return data;
@@ -28,7 +19,7 @@ export async function fetchStoryNode(key: string) {
 // Post a choice to the story API
 export async function postStoryChoice(current: string, choice_index: number) {
   const [data, error] = await fetchHandler(
-    "/api/story/choice",
+    "/api/game/choice",
     getPostOptions({ current, choice_index })
   );
   if (error) throw error;
@@ -38,7 +29,7 @@ export async function postStoryChoice(current: string, choice_index: number) {
 // Use an item for story progression
 export async function useItemForStory(current: string, item_name: string) {
   const [data, error] = await fetchHandler(
-    "/api/story/use-item",
+    "/api/game/use-item",
     getPostOptions({ current, item_name })
   );
   if (error) throw error;
@@ -48,7 +39,7 @@ export async function useItemForStory(current: string, item_name: string) {
 //Fetch inventory items
 export async function fetchInventory(character_id: number) {
   const [data, error] = await fetchHandler(
-    `/api/inventory/${character_id}`,
+    "/api/inventory/",
     basicFetchOptions()
   );
   if (error) throw error;
@@ -62,7 +53,7 @@ export async function postInventoryItem(
   description: string
 ) {
   const [data, error] = await fetchHandler(
-    `/api/inventory/${character_id}`,
+    "/api/inventory/add",
     getPostOptions({ item_name, description })
   );
   if (error) throw error;
@@ -83,18 +74,26 @@ export async function deleteInventoryItem(
 
 export async function useInventoryItem(character_id: number, item_id: number) {
   const [data, error] = await fetchHandler(
-    `/api/inventory/${character_id}/${item_id}`,
-    getPostOptions({})
+    `/api/inventory/${item_id}/use`,
+    getPutOptions({})
   );
   if (error) throw error;
   return data;
 }
 
 export async function resetInventory(character_id: number) {
-  const token = localStorage.getItem("authToken");
   const [data, error] = await fetchHandler(
-    `/api/inventory/${character_id}/reset`,
-    getPostOptions({ token })
+    "/api/inventory/reset",
+    getPostOptions({})
+  );
+  if (error) throw error;
+  return data;
+}
+
+export async function resetCharacter(character_id: number) {
+  const [data, error] = await fetchHandler(
+    "/api/characters/reset",
+    getPostOptions({})
   );
   if (error) throw error;
   return data;
@@ -103,7 +102,7 @@ export async function resetInventory(character_id: number) {
 export async function saveGameState(gameState: any) {
   const token = localStorage.getItem("authToken");
   const [data, error] = await fetchHandler(
-    "/api/game/save",
+    "/api/auth/save",
     getPostOptions({ ...gameState, token })
   );
   if (error) throw error;
@@ -113,8 +112,8 @@ export async function saveGameState(gameState: any) {
 export async function loadGameState() {
   const token = localStorage.getItem("authToken");
   const [data, error] = await fetchHandler(
-    "/api/game/load",
-    getPostOptions({ token })
+    "/api/auth/load",
+    basicFetchOptions()
   );
   if (error) throw error;
   return data;

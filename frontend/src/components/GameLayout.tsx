@@ -1,18 +1,16 @@
 import { useState, useEffect } from "react";
 import {
   fetchStoryStart,
-  fetchStoryNode,
   postStoryChoice,
   postInventoryItem,
   resetInventory,
   useInventoryItem,
   useItemForStory,
+  resetCharacter,
+  saveGameState,
+  loadGameState,
 } from "../api/storyFetch";
-import {
-  fetchCharacter,
-  updateCharacterStats,
-  restartCharacter,
-} from "../api/auth";
+import { fetchCharacter, updateCharacterStats } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 import { fetchInventory } from "../api/storyFetch";
 import SaveLoadControls from "./SaveLoadControls";
@@ -61,20 +59,31 @@ function GameLayout() {
     if (!character) return;
 
     try {
-      await restartCharacter(character.id);
+      // Reset character stats and game state
+      await resetCharacter(character.id);
+      // Reset inventory
+      await resetInventory(character.id);
+
+      // Fetch updated character and inventory
       const updatedCharacter = await fetchCharacter();
-      setCharacter(updatedCharacter);
+      setCharacter(updatedCharacter.character);
+      const updatedInventory = await fetchInventory(
+        updatedCharacter.character.id
+      );
+      setInventory(updatedInventory.inventory);
 
       // Reset game state
       setGameEnded(false);
       setError(null);
 
-      // Reload story and inventory
+      // Reload story
       const storyData = await fetchStoryStart();
-      setNode(storyData);
-      setCurrentKey(storyData.stage); // <-- Move here, after storyData is defined
-      const updatedInventory = await fetchInventory(character.id);
-      setInventory(updatedInventory);
+      if (storyData.current_scene) {
+        setNode(storyData.current_scene);
+        setCurrentKey(storyData.current_scene.stage);
+      } else {
+        setError("No story scene available after restart.");
+      }
     } catch (error) {
       console.error("Error restarting game:", error);
       setError("Failed to restart game.");
@@ -90,30 +99,40 @@ function GameLayout() {
     }
     fetchCharacter()
       .then((data) => {
-        setCharacter(data);
+        setCharacter(data.character);
         // Fetch inventory after character is loaded
-        return fetchInventory(data.id);
+        return fetchInventory(data.character.id);
       })
-      .then((inv) => setInventory(inv))
+      .then((inv) => setInventory(inv.inventory))
       .catch(() => setError("Failed to load character or inventory."));
   }, []);
 
   // Load the inventory on mount
   useEffect(() => {
     if (character) {
-      fetchInventory(character.id).then(setInventory);
+      fetchInventory(character.id).then((inv) => setInventory(inv.inventory));
     }
   }, [character]);
 
-  // Load the first node on mount
+  // Load the first node after character is loaded
   useEffect(() => {
-    fetchStoryStart()
-      .then((data) => {
-        setNode(data);
-        setCurrentKey(data.stage); // Set currentKey to the node's stage
-      })
-      .catch(() => setError("Failed to load story."));
-  }, []);
+    if (character) {
+      fetchStoryStart()
+        .then((data) => {
+          // The backend returns the full game data including current_scene
+          if (data.current_scene) {
+            setNode(data.current_scene);
+            setCurrentKey(data.current_scene.stage);
+          } else {
+            setError("No story scene available.");
+          }
+        })
+        .catch((error) => {
+          console.error("Story loading error:", error);
+          setError("Failed to load story. Please try refreshing the page.");
+        });
+    }
+  }, [character]);
 
   // Clear auth token on page unload
   useEffect(() => {
@@ -129,11 +148,8 @@ function GameLayout() {
   // Handle choice selection
   const handleChoice = async (choiceIndex: number) => {
     try {
-      console.log("POST /api/story/choice", {
-        current: currentKey,
-        choice_index: choiceIndex,
-      });
       const data = await postStoryChoice(currentKey, choiceIndex);
+
       if (data.error) {
         setError(data.error);
         return;
@@ -141,45 +157,21 @@ function GameLayout() {
 
       const selectedOption = node?.options[choiceIndex];
 
-      // If the choice requires an item, check inventory
-      if (
-        selectedOption?.consume_item &&
-        selectedOption.required_item &&
-        character
-      ) {
-        const hasItem = inventory?.some(
-          (item: any) =>
-            item.item_name === selectedOption.required_item && !item.used
-        );
-        if (!hasItem) {
-          setError(`You need the ${selectedOption.required_item} to do that!`);
-          return;
-        }
-        // Mark the item as used
-        const itemToUse = inventory.find(
-          (item: any) =>
-            item.item_name === selectedOption.required_item && !item.used
-        );
-        if (itemToUse) {
-          await useInventoryItem(character.id, itemToUse.id);
-          const updatedInventory = await fetchInventory(character.id);
-          setInventory(updatedInventory);
-        }
-      }
-
+      // Update character stats if needed
       if (selectedOption?.stat_changes && character) {
         const newFear =
-          (character.fear || 0) + (selectedOption.stat_changes.fear + 12 || 0);
+          (character.fear || 0) + (selectedOption.stat_changes.fear || 0);
         const newSanity =
-          (character.sanity || 0) +
-          (selectedOption.stat_changes.sanity - 10 || 0);
+          (character.sanity || 0) + (selectedOption.stat_changes.sanity || 0);
+
         const updatedCharacter = await updateCharacterStats(character.id, {
           fear: newFear,
           sanity: newSanity,
         });
-        setCharacter(updatedCharacter);
+        setCharacter(updatedCharacter.character);
       }
-      // If the option has a reward, add it to inventory
+
+      // Add reward to inventory if needed
       if (selectedOption?.reward && character) {
         await postInventoryItem(
           character.id,
@@ -187,19 +179,26 @@ function GameLayout() {
           "Reward from story choice"
         );
         const updatedInventory = await fetchInventory(character.id);
-        setInventory(updatedInventory);
+        setInventory(updatedInventory.inventory);
       }
 
+      // Update the story node
       setNode(data);
+      console.log("Updated node:", data);
       if (data && data.stage) {
-        setCurrentKey(data.stage); // Always update currentKey to the new node's stage
+        setCurrentKey(data.stage);
+        console.log("Updated currentKey:", data.stage);
       }
+
+      // Check for ending
       if (data.stage && data.stage.startsWith("ending") && character) {
         await resetInventory(character.id);
+        await resetCharacter(character.id);
         setInventory([]);
         setGameEnded(true);
       }
-    } catch {
+    } catch (error) {
+      console.error("Story progression error:", error);
       setError("Failed to progress story.");
     }
   };
@@ -255,10 +254,9 @@ function GameLayout() {
       }));
     }
     if (data.inventory_snapshot) setInventory(data.inventory_snapshot);
-    // Optionally, fetch the node for the loaded stage
-    if (data.current_stage) {
-      fetchStoryNode(data.current_stage).then(setNode);
-    }
+    // Note: We can't fetch a specific story node by stage with the current backend
+    // The backend only provides /api/game/start which returns the current scene
+    // For now, we'll need to restart the game to get the proper scene data
   };
 
   // If there's a node, return the game content
@@ -306,12 +304,12 @@ function GameLayout() {
                         const updatedInventory = await fetchInventory(
                           character.id
                         );
-                        setInventory(updatedInventory);
+                        setInventory(updatedInventory.inventory);
 
                         // If story progression was triggered, update the story
-                        if (storyResponse.node) {
-                          setNode(storyResponse.node);
-                          setCurrentKey(storyResponse.node.title);
+                        if (storyResponse && storyResponse.current_node) {
+                          setNode(storyResponse.current_node);
+                          setCurrentKey(storyResponse.current_node.stage);
                           setError(null); // Clear any previous errors
                         }
                       } catch (error) {

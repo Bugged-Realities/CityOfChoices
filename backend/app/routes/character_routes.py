@@ -91,6 +91,39 @@ def update_character_stats():
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': 'Failed to update character stats', 'details': str(e)}), 500
+
+@character_bp.route('/reset', methods=['POST'])
+@jwt_required()
+def reset_character():
+    """Reset character stats to initial values"""
+    try:
+        user_id = get_jwt_identity()
+        character = Character.query.filter_by(user_id=user_id).first()
+        if not character:
+            return jsonify({'error': 'Character not found'}), 404
+        
+        # Reset stats to initial values
+        character.fear = 0
+        character.sanity = 100
+        
+        # Reset game state to start
+        game_state = GameState.query.filter_by(character_id=character.id).first()
+        if game_state:
+            game_state.current_stage = 'start'
+            game_state.scene_id = 'start'
+            game_state.choice_history = []
+            game_state.current_stats = {'fear': 0, 'sanity': 100}
+            game_state.inventory_snapshot = []
+        
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'Character reset successfully',
+            'character': character.to_dict()
+        }), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'Failed to reset character', 'details': str(e)}), 500
         
 
 

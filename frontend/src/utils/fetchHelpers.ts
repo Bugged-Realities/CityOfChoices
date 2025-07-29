@@ -31,11 +31,19 @@ export const getPatchOptions = (body: any) => ({
   body: JSON.stringify(body),
 });
 
+export const getPutOptions = (body: any) => ({
+  method: "PUT",
+  credentials: "include",
+  headers: getAuthHeaders({ "Content-Type": "application/json" }),
+  body: JSON.stringify(body),
+});
+
 export const fetchHandler = async (url: string, options = {}) => {
   try {
     const response = await fetch(url, options);
 
     const { ok, status, statusText, headers } = response;
+
     if (!ok)
       throw new Error(`Fetch failed with status - ${status} - ${statusText}`, {
         cause: status,
@@ -48,7 +56,7 @@ export const fetchHandler = async (url: string, options = {}) => {
 
     return [responseData, null];
   } catch (error) {
-    console.warn(error);
+    console.warn("fetchHandler error:", error);
     return [null, error];
   }
 };

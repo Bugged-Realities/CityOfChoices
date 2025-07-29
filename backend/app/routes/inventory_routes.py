@@ -82,3 +82,25 @@ def use_item(item_id):
         db.session.rollback()
         return jsonify({'error': 'Failed to use item', 'details': str(e)}), 500
 
+@inventory_bp.route('/reset', methods=['POST'])
+@jwt_required()
+def reset_inventory():
+    try:
+        user_id = get_jwt_identity()
+        user = Users.query.filter_by(id=user_id).first()
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
+        
+        character = Character.query.filter_by(user_id=user_id).first()
+        if not character:
+            return jsonify({'error': 'Character not found'}), 404
+        
+        # Delete all inventory items for this character
+        Inventory.query.filter_by(character_id=character.id).delete()
+        db.session.commit()
+        
+        return jsonify({'message': 'Inventory reset successfully'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'Failed to reset inventory', 'details': str(e)}), 500
+

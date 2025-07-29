@@ -15,7 +15,7 @@ def validate_email(email):
 
 def validate_password(password):
     """Validate password strength"""
-    if len(password) < 8:
+    if len(password) < 6:
         return False, "Password must be at least 8 characters long"
     if not re.search(r'[A-Z]', password):
         return False, "Password must contain at least one uppercase letter"

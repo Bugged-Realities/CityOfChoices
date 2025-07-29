@@ -7,10 +7,10 @@ import {
   deleteOptions,
 } from "../utils/fetchHelpers";
 
-export async function login(email: string, password: string) {
+export async function login(username: string, password: string) {
   const [data, error] = await fetchHandler(
     "/api/auth/login",
-    getPostOptions({ email, password })
+    getPostOptions({ username, password })
   );
   if (error) throw error;
 
@@ -27,7 +27,7 @@ export async function signup(
   password: string
 ) {
   const [data, error] = await fetchHandler(
-    "/api/auth/signup",
+    "/api/auth/register",
     getPostOptions({ username, email, password })
   );
   if (error) throw error;
@@ -41,7 +41,7 @@ export async function signup(
 // Fetch the character and update the character
 export async function fetchCharacter() {
   const [data, error] = await fetchHandler(
-    "/api/character/me",
+    "/api/characters/get",
     basicFetchOptions()
   );
   if (error) throw error;
@@ -53,8 +53,8 @@ export async function updateCharacterStats(
   updates: { fear?: number; sanity?: number }
 ) {
   const [data, error] = await fetchHandler(
-    `/api/character/${character_id}`,
-    getPatchOptions(updates)
+    "/api/characters/update-stats",
+    getPostOptions(updates)
   );
   if (error) throw error;
   return data;
@@ -64,15 +64,6 @@ export async function deleteCharacter(character_id: number) {
   const [data, error] = await fetchHandler(
     `/api/character/${character_id}`,
     deleteOptions
-  );
-  if (error) throw error;
-  return data;
-}
-
-export async function restartCharacter(character_id: number) {
-  const [data, error] = await fetchHandler(
-    `/api/character/${character_id}/restart`,
-    getPostOptions({})
   );
   if (error) throw error;
   return data;
