@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { saveGameState, loadGameState } from "../api/storyFetch";
+import LoadGameModal from "./LoadGameModal";
 
 interface SaveLoadControlsProps {
   getGameState: () => any;
-  setGameState: (data: any) => void;
+  setGameState: (data: any) => Promise<void>;
 }
 
 const SaveLoadControls: React.FC<SaveLoadControlsProps> = ({
@@ -12,6 +13,9 @@ const SaveLoadControls: React.FC<SaveLoadControlsProps> = ({
 }) => {
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showLoadModal, setShowLoadModal] = useState(false);
+  const [savedGameData, setSavedGameData] = useState<any>(null);
+  const [modalLoading, setModalLoading] = useState(false);
 
   const handleSave = async () => {
     setLoading(true);
@@ -27,18 +31,36 @@ const SaveLoadControls: React.FC<SaveLoadControlsProps> = ({
     }
   };
 
-  const handleLoad = async () => {
-    setLoading(true);
-    setMessage(null);
+  const handleLoadClick = async () => {
+    setModalLoading(true);
     try {
       const data = await loadGameState();
-      setGameState(data);
+      setSavedGameData(data);
+      setShowLoadModal(true);
+    } catch (err) {
+      setMessage("Failed to load saved game data.");
+    } finally {
+      setModalLoading(false);
+    }
+  };
+
+  const handleLoadConfirm = async () => {
+    setModalLoading(true);
+    setMessage(null);
+    try {
+      await setGameState(savedGameData);
       setMessage("Game loaded!");
+      setShowLoadModal(false);
     } catch (err) {
       setMessage("Failed to load game.");
     } finally {
-      setLoading(false);
+      setModalLoading(false);
     }
+  };
+
+  const handleCloseModal = () => {
+    setShowLoadModal(false);
+    setSavedGameData(null);
   };
 
   return (
@@ -48,12 +70,20 @@ const SaveLoadControls: React.FC<SaveLoadControlsProps> = ({
         disabled={loading}
         style={{ marginRight: 8 }}
       >
-        Save
+        {loading ? "Saving..." : "Save"}
       </button>
-      <button onClick={handleLoad} disabled={loading}>
-        Load
+      <button onClick={handleLoadClick} disabled={loading || modalLoading}>
+        {modalLoading ? "Loading..." : "Load"}
       </button>
       {message && <span style={{ marginLeft: 12 }}>{message}</span>}
+
+      <LoadGameModal
+        isOpen={showLoadModal}
+        onClose={handleCloseModal}
+        onLoad={handleLoadConfirm}
+        savedGameData={savedGameData}
+        loading={modalLoading}
+      />
     </div>
   );
 };

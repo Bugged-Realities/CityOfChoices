@@ -6,7 +6,7 @@ function GamePage() {
   return (
     <>
       <Header />
-      <div className="main-content">
+      <div>
         <GameLayout />
       </div>
       <Footer />

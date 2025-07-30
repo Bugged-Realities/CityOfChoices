@@ -16,6 +16,15 @@ export async function fetchStoryStart() {
   return data;
 }
 
+export async function fetchSceneByStage(stage: string) {
+  const [data, error] = await fetchHandler(
+    `/api/game/scene/${stage}`,
+    basicFetchOptions()
+  );
+  if (error) throw error;
+  return data;
+}
+
 // Post a choice to the story API
 export async function postStoryChoice(current: string, choice_index: number) {
   const [data, error] = await fetchHandler(

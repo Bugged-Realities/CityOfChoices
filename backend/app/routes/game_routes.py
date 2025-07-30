@@ -86,6 +86,16 @@ def make_choice():
         
         next_node = Scene.query.filter_by(stage=next_stage).first()
         if next_node:
+            # Update the game state to reflect the new stage
+            user_id = get_jwt_identity()
+            character = Character.query.filter_by(user_id=user_id).first()
+            if character:
+                game_state = GameState.query.filter_by(character_id=character.id).first()
+                if game_state:
+                    game_state.scene_id = next_stage
+                    game_state.current_stage = next_stage
+                    db.session.commit()
+            
             return jsonify(next_node.to_dict())
         else:
             print(f"DEBUG: Next node not found for stage: {next_stage}")
@@ -98,6 +108,19 @@ def make_choice():
 # this is the item that the user uses. It will return the next node in the story.
 # I needed to add this because the item is used in the story, so there needs to be a way to trigger the 
 # story progression.
+@game_bp.route('/scene/<stage>', methods=['GET'])
+@jwt_required()
+def get_scene_by_stage(stage):
+    """Get a specific scene by stage name"""
+    try:
+        scene = Scene.query.filter_by(stage=stage).first()
+        if not scene:
+            return jsonify({'error': f'Scene not found for stage: {stage}'}), 404
+        return jsonify(scene.to_dict()), 200
+    except Exception as e:
+        return jsonify({'error': 'Failed to get scene', 'details': str(e)}), 500
+
+
 @game_bp.route('/use-item', methods=['POST'])
 @jwt_required()
 def use_item_for_story():
@@ -126,6 +149,16 @@ def use_item_for_story():
             next_stage = trigger['next']
             next_node = Scene.query.filter_by(stage=next_stage).first()
             if next_node:
+                # Update the game state to reflect the new stage
+                user_id = get_jwt_identity()
+                character = Character.query.filter_by(user_id=user_id).first()
+                if character:
+                    game_state = GameState.query.filter_by(character_id=character.id).first()
+                    if game_state:
+                        game_state.scene_id = next_stage
+                        game_state.current_stage = next_stage
+                        db.session.commit()
+                
                 return jsonify({
                     'node': next_node.to_dict(),
                     'message': f'Using {item_name} triggered story progression!'
