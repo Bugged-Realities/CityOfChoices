@@ -49,7 +49,7 @@ const BACKGROUND_THEMES: Record<
 > = {
   subway_tunnel: {
     image:
-      "images/Flux_Dev_Create_a_layered_pixel_art_parallax_background_inspir_0.jpg",
+      "/images/Flux_Dev_Create_a_layered_pixel_art_parallax_background_inspir_0.jpg",
     mood: "mysterious",
     transition: "fade",
   },
@@ -102,22 +102,11 @@ const Background: React.FC<BackgroundProps> = ({ stageId }) => {
   // Handle theme changes
   useEffect(() => {
     if (backgroundTheme !== currentTheme) {
-      console.log(
-        "Background theme change:",
-        currentTheme,
-        "->",
-        backgroundTheme
-      );
-      console.log("Setting next theme to:", backgroundTheme);
       setNextTheme(backgroundTheme);
       setShowNext(true);
 
       // After the fade transition completes, update the current theme
       const timer = setTimeout(() => {
-        console.log(
-          "Transition complete, updating current theme to:",
-          backgroundTheme
-        );
         setCurrentTheme(backgroundTheme);
         setNextTheme(null);
         setShowNext(false);
@@ -136,18 +125,6 @@ const Background: React.FC<BackgroundProps> = ({ stageId }) => {
       setCurrentTheme(backgroundTheme);
     }
   }, [backgroundTheme, currentTheme]);
-
-  console.log(
-    "Render - currentTheme:",
-    currentTheme,
-    "nextTheme:",
-    nextTheme,
-    "showNext:",
-    showNext
-  );
-  console.log("Current theme data:", currentThemeData);
-  console.log("Next theme data:", nextThemeData);
-
   return (
     <div className="background-container">
       {/* Current background layer */}

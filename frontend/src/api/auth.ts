@@ -3,7 +3,6 @@ import {
   fetchHandler,
   basicFetchOptions,
   getPostOptions,
-  getPatchOptions,
   deleteOptions,
 } from "../utils/fetchHelpers";
 
@@ -48,10 +47,10 @@ export async function fetchCharacter() {
   return data;
 }
 
-export async function updateCharacterStats(
-  character_id: number,
-  updates: { fear?: number; sanity?: number }
-) {
+export async function updateCharacterStats(updates: {
+  fear?: number;
+  sanity?: number;
+}) {
   const [data, error] = await fetchHandler(
     "/api/characters/update-stats",
     getPostOptions(updates)
@@ -60,9 +59,9 @@ export async function updateCharacterStats(
   return data;
 }
 
-export async function deleteCharacter(character_id: number) {
+export async function deleteCharacter(characterId: number) {
   const [data, error] = await fetchHandler(
-    `/api/character/${character_id}`,
+    `/api/characters/${characterId}`,
     deleteOptions
   );
   if (error) throw error;

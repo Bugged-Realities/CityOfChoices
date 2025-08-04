@@ -5,6 +5,12 @@ from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
 from .config import Config
 from .models import db
+from .utils.error_handling import (
+    handle_game_exception,
+    handle_generic_exception,
+    handle_http_exception,
+    GameException
+)
 
 # Initialize extensions
 jwt = JWTManager()
@@ -43,5 +49,22 @@ def create_app():
     app.register_blueprint(character_bp, url_prefix='/api/characters')
     app.register_blueprint(game_bp, url_prefix='/api/game')
     app.register_blueprint(inventory_bp, url_prefix='/api/inventory')
+    
+    # Register error handlers
+    @app.errorhandler(GameException)
+    def handle_game_exception_handler(error):
+        return handle_game_exception(error)
+    
+    @app.errorhandler(Exception)
+    def handle_generic_exception_handler(error):
+        return handle_generic_exception(error)
+    
+    @app.errorhandler(404)
+    def handle_not_found(error):
+        return handle_http_exception(error)
+    
+    @app.errorhandler(500)
+    def handle_internal_error(error):
+        return handle_generic_exception(error)
     
     return app

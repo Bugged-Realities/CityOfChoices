@@ -23,7 +23,7 @@ const HomePage = () => {
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `linear-gradient(rgba(97,176,68,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(97,176,68,0.02) 1px, transparent 1px)`,
+            backgroundImage: `linear-gradient(rgba(97,176,68,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(97,176,68,0.02) 1px, transparent 1px)`,
             backgroundSize: "20px 20px",
           }}
         ></div>

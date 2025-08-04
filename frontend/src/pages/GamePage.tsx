@@ -1,6 +1,5 @@
 import GameLayout from "../components/GameLayout";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
 
 function GamePage() {
   return (
@@ -9,7 +8,6 @@ function GamePage() {
       <div>
         <GameLayout />
       </div>
-      <Footer />
     </>
   );
 }

@@ -1,8 +1,53 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..models import db, GameState, Character, Scene, Inventory
+from ..utils.error_handling import (
+    ValidationError,
+    NotFoundError,
+    DatabaseError,
+    safe_database_operation,
+    validate_required_fields,
+    validate_field_type,
+    log_api_request,
+    log_api_response
+)
 import json
 import random
+
+def validate_required_items(option, character_id):
+    """
+    Validate if the player has the required items for a choice.
+    Returns (is_valid, missing_items) tuple.
+    """
+    if not option:
+        return True, []
+    
+    missing_items = []
+    
+    # Check for single required item
+    if 'required_item' in option and option['required_item']:
+        required_item = option['required_item']
+        inventory_item = Inventory.query.filter_by(
+            character_id=character_id,
+            item_name=required_item,
+            used=False
+        ).first()
+        if not inventory_item:
+            missing_items.append(required_item)
+    
+    # Check for multiple required items
+    if 'required_items' in option and option['required_items']:
+        required_items = option['required_items']
+        for item_name in required_items:
+            inventory_item = Inventory.query.filter_by(
+                character_id=character_id,
+                item_name=item_name,
+                used=False
+            ).first()
+            if not inventory_item:
+                missing_items.append(item_name)
+    
+    return len(missing_items) == 0, missing_items
 
 game_bp = Blueprint('game', __name__)
 
@@ -47,62 +92,93 @@ def get_start_game():
 @game_bp.route('/choice', methods=['POST'])
 @jwt_required()
 def make_choice():
-    data = request.get_json()
-    if not data:
-        return jsonify({'error': 'No JSON data provided'}), 400
+    user_id = get_jwt_identity()
+    log_api_request('POST', '/choice', user_id)
     
-    # this is the current stage of the story.
-    current_stage = data.get('current')
-    # This is the choice that the user makes.
-    choice_index = data.get('choice_index')
-    
-    # print(f"DEBUG: Received choice request - current_stage: {current_stage}, choice_index: {choice_index}")
-    
-    if current_stage is None:
-        return jsonify({'error': 'Missing current stage'}), 400
-    if choice_index is None:
-        return jsonify({'error': 'Missing choice index'}), 400
-    current_node = Scene.query.filter_by(stage=current_stage).first()
-    if not current_node:
-        print(f"DEBUG: Current node not found for stage: {current_stage}")
-        return jsonify({'error': f'Invalid current node: {current_stage}'}), 400
-
     try:
-        options = current_node.options or []
-        print(f"DEBUG: Found {len(options)} options for stage {current_stage}")
+        # Validate request data
+        data = request.get_json()
+        if not data:
+            raise ValidationError('No JSON data provided')
         
+        validate_required_fields(data, ['current', 'choice_index'], 'make_choice')
+        validate_field_type(data['choice_index'], int, 'choice_index')
+        
+        current_stage = data['current']
+        choice_index = data['choice_index']
+        
+        # Find current scene
+        current_node = safe_database_operation(
+            lambda: Scene.query.filter_by(stage=current_stage).first(),
+            f"Failed to find scene for stage: {current_stage}"
+        )
+        
+        if not current_node:
+            raise NotFoundError(f'Scene not found for stage: {current_stage}')
+        
+        # Validate choice index
+        options = current_node.options or []
         if choice_index >= len(options):
-            return jsonify({'error': f'Choice index {choice_index} out of range. Available options: {len(options)}'}), 400
+            raise ValidationError(
+                f'Choice index {choice_index} out of range. Available options: {len(options)}',
+                {'choice_index': choice_index, 'available_options': len(options)}
+            )
         if choice_index < 0:
-            return jsonify({'error': f'Choice index {choice_index} is negative'}), 400
+            raise ValidationError(f'Choice index {choice_index} is negative')
+        
         selected_option = options[choice_index]
-        # print(f"DEBUG: Selected option: {selected_option}")
+        
+        # Find character
+        character = safe_database_operation(
+            lambda: Character.query.filter_by(user_id=user_id).first(),
+            "Failed to find character"
+        )
+        
+        if not character:
+            raise NotFoundError('Character not found')
+        
+        # Validate required items
+        is_valid, missing_items = validate_required_items(selected_option, character.id)
+        if not is_valid:
+            missing_items_str = ', '.join(missing_items)
+            raise ValidationError(
+                f'Missing required items: {missing_items_str}',
+                {'missing_items': missing_items}
+            )
         
         if 'next' not in selected_option:
-            return jsonify({'error': f'Selected option has no next stage: {selected_option}'}), 400
+            raise ValidationError(f'Selected option has no next stage')
         
         next_stage = selected_option['next']
-        # print(f"DEBUG: Next stage: {next_stage}")
         
-        next_node = Scene.query.filter_by(stage=next_stage).first()
-        if next_node:
-            # Update the game state to reflect the new stage
-            user_id = get_jwt_identity()
-            character = Character.query.filter_by(user_id=user_id).first()
-            if character:
-                game_state = GameState.query.filter_by(character_id=character.id).first()
-                if game_state:
-                    game_state.scene_id = next_stage
-                    game_state.current_stage = next_stage
-                    db.session.commit()
-            
-            return jsonify(next_node.to_dict())
-        else:
-            print(f"DEBUG: Next node not found for stage: {next_stage}")
-            return jsonify({'error': f'Next node not found: {next_stage}'}), 404
-    except (IndexError, KeyError, TypeError) as e:
-        print(f"DEBUG: Exception occurred: {e}")
-        return jsonify({'error': f'Invalid choice: {str(e)}'}), 400
+        # Find next scene
+        next_node = safe_database_operation(
+            lambda: Scene.query.filter_by(stage=next_stage).first(),
+            f"Failed to find next scene for stage: {next_stage}"
+        )
+        
+        if not next_node:
+            raise NotFoundError(f'Next scene not found: {next_stage}')
+        
+        # Update game state
+        def update_game_state():
+            game_state = GameState.query.filter_by(character_id=character.id).first()
+            if game_state:
+                game_state.scene_id = next_stage
+                game_state.current_stage = next_stage
+                db.session.commit()
+        
+        safe_database_operation(update_game_state, "Failed to update game state")
+        
+        log_api_response(200, '/choice', user_id)
+        return jsonify(next_node.to_dict())
+        
+    except (ValidationError, NotFoundError, DatabaseError) as e:
+        log_api_response(e.status_code, '/choice', user_id, error=str(e))
+        raise
+    except Exception as e:
+        log_api_response(500, '/choice', user_id, error=str(e))
+        raise DatabaseError(f"Unexpected error in make_choice: {str(e)}")
 
 
 # this is the item that the user uses. It will return the next node in the story.

@@ -50,66 +50,68 @@ const HomeIntroSection: React.FC = () => {
   return (
     <>
       {/* Game Overview Section */}
-      <section className="pt-20 px-4 max-w-4xl mx-auto text-left space-y-12 bg-[#0A0F1C] text-[#E8E6E3] min-h-screen">
-        <div className="space-y-8">
-          <h2 className="text-[#E05219] font-['Press_Start_2P'] text-2xl font-bold mb-6">
-            Welcome to the City of Choices
+      <section className="pt-20 px-4 max-w-4xl mx-auto text-left text-[#E8E6E3] min-h-[80vh]">
+        <div className="bg-[#1A1F2C] rounded-lg border border-[#5ec3b8] p-8">
+          <h2 className="text-[#E05219] font-['Press_Start_2P'] text-2xl font-bold mb-6 text-center">
+            Discover the City of Choices
           </h2>
-          <p className="text-lg leading-relaxed mb-8">
-            Board the wrong NYC subway train and find yourself trapped in a
-            surreal, pixel-art world. Navigate strange tunnels, meet bizarre
-            characters, and make choices that shape your fate. Will you escape,
-            or become part of the underground?
+          <p className="text-lg leading-relaxed mb-8 text-center">
+            Step into a pixel-art NYC subway where every choice leads to new
+            adventures. Meet quirky characters, uncover secrets, and shape your
+            own story. Will you find your way out, or embrace the mysteries
+            below?
           </p>
-          <ul className="space-y-6">
-            {features.map((f, i) => (
-              <li
-                key={i}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {features.map((feature, idx) => (
+              <div
+                key={idx}
                 tabIndex={0}
-                className="flex items-start space-x-4 p-4 bg-[#1A1F2C] rounded-lg border border-[#61B044] hover:border-[#E05219] transition-colors"
+                className="aspect-square p-6 bg-[#0A0F1C] rounded-lg border border-[#5ec3b8] hover:border-[#E05219] transition-colors flex flex-col items-center justify-center text-center shadow-lg"
               >
-                <span role="img" aria-label={f.title} className="text-2xl">
-                  {f.icon}
+                <span aria-hidden="true" className="text-3xl mb-3">
+                  {feature.icon}
                 </span>
-                <div className="flex-1">
-                  <span className="block text-[#E05219] font-['Press_Start_2P'] font-bold text-sm mb-2">
-                    {f.title}
-                  </span>
-                  <span className="block text-[#8B8A91] text-sm leading-relaxed">
-                    {f.desc}
-                  </span>
+                <div className="space-y-2">
+                  <div className="text-[#E05219] font-['Press_Start_2P'] font-bold text-sm">
+                    {feature.title}
+                  </div>
+                  <div className="text-[#8B8A91] text-sm leading-tight">
+                    {feature.desc}
+                  </div>
                 </div>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       </section>
 
       {/* How It Works Section */}
-      <section className="px-4 max-w-4xl mx-auto py-12 bg-[#0A0F1C] text-[#E8E6E3]">
-        <h2 className="text-[#E05219] font-['Press_Start_2P'] text-2xl font-bold mb-8 text-center">
-          How It Works
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {steps.map((step, idx) => (
-            <div
-              tabIndex={0}
-              key={idx}
-              className="flex flex-col items-center text-center p-6 bg-[#1A1F2C] rounded-lg border border-[#61B044] hover:border-[#E05219] transition-colors"
-            >
-              <span aria-hidden="true" className="text-3xl mb-4">
-                {step.icon}
-              </span>
-              <div className="space-y-2">
-                <div className="text-[#E05219] font-['Press_Start_2P'] font-bold text-sm">
-                  {step.title}
-                </div>
-                <div className="text-[#8B8A91] text-xs leading-relaxed">
-                  {step.desc}
+      <section className="px-4 max-w-4xl mx-auto pt-0 pb-12 text-[#E8E6E3]">
+        <div className="bg-[#1A1F2C] rounded-lg border border-[#5ec3b8] p-8">
+          <h2 className="text-[#E05219] font-['Press_Start_2P'] text-2xl font-bold mb-8 text-center">
+            How It Works
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {steps.map((step, idx) => (
+              <div
+                tabIndex={0}
+                key={idx}
+                className="aspect-square p-4 bg-[#0A0F1C] rounded-lg border border-[#5ec3b8] hover:border-[#5ec3b8] transition-colors flex flex-col items-center justify-center text-center"
+              >
+                <span aria-hidden="true" className="text-2xl mb-2">
+                  {step.icon}
+                </span>
+                <div className="space-y-1">
+                  <div className="text-[#E05219] font-['Press_Start_2P'] font-bold text-xs">
+                    {step.title}
+                  </div>
+                  <div className="text-[#8B8A91] text-xs leading-tight">
+                    {step.desc}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
     </>
