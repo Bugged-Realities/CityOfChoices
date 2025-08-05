@@ -1,0 +1,244 @@
+[
+  {
+    "stage": "start_subway",
+    "description": "You find yourself on a strange subway train with walls that seem to breathe and seats that whisper your name. The lights flicker between purple and green.",
+    "options": [
+      {
+        "text": "Stay seated and pretend to sleep",
+        "next": "subway_sleeping",
+        "reward": "Glowing Scale",
+        "stat_changes": { "fear": -1 }
+      },
+      {
+        "text": "Approach the conductor with too many eyes",
+        "next": "conductor_meeting",
+        "stat_changes": { "sanity": 2 }
+      },
+      {
+        "text": "Hide behind the breathing wall",
+        "next": "wall_encounter",
+        "stat_changes": { "fear": 1, "sanity": -1 }
+      }
+    ]
+  },
+  {
+    "stage": "start_city",
+    "description": "You emerge directly into a crystalline city where buildings grow like living crystal and the sky is an ocean of liquid light. Lizard people in business suits hurry past you.",
+    "options": [
+      {
+        "text": "Follow the lizard people to understand their society",
+        "next": "lizard_observation",
+        "stat_changes": { "sanity": 1 }
+      },
+      {
+        "text": "Explore the crystal buildings alone",
+        "next": "crystal_exploration",
+        "reward": "Crystal Shard",
+        "stat_changes": { "fear": -1 }
+      },
+      {
+        "text": "Look for other humans in the city",
+        "next": "human_search",
+        "stat_changes": { "fear": 1 }
+      }
+    ]
+  },
+  {
+    "stage": "start_depths",
+    "description": "You awaken in the reality-warping Depths where gravity flows sideways and your thoughts echo as visible colors in the air.",
+    "options": [
+      {
+        "text": "Follow your colorful thoughts to their source",
+        "next": "thought_trail",
+        "stat_changes": { "sanity": -2 }
+      },
+      {
+        "text": "Try to find a way back to normal reality",
+        "next": "reality_search",
+        "stat_changes": { "fear": 2, "sanity": 1 }
+      },
+      {
+        "text": "Embrace the chaos and let it transform you",
+        "next": "chaos_acceptance",
+        "reward": "Chaos Fragment",
+        "stat_changes": { "sanity": -3, "fear": -2 }
+      }
+    ]
+  },
+  {
+    "stage": "subway_sleeping",
+    "description": "The conductor passes by, leaving a trail of silver dust. Your Glowing Scale pulses gently in your pocket.",
+    "options": [
+      {
+        "text": "Exit when the train stops at Crystal City",
+        "next": "crystal_city_entrance",
+        "stat_changes": { "sanity": 1 }
+      },
+      {
+        "text": "Use the Glowing Scale to see visions",
+        "next": "scale_visions",
+        "required_item": "Glowing Scale",
+        "reward": "Vision Fragment"
+      },
+      {
+        "text": "Continue riding to see where the train goes",
+        "next": "deep_journey",
+        "stat_changes": { "fear": 1 }
+      }
+    ],
+    "item_triggers": [
+      {
+        "item": "Glowing Scale",
+        "next": "scale_visions",
+        "message": "The Glowing Scale reveals visions of lizard people ruling a crystalline kingdom!"
+      }
+    ]
+  },
+  {
+    "stage": "conductor_meeting",
+    "description": "The conductor whispers riddles in ancient tongues. He stamps your hand with a mark that glows briefly.",
+    "options": [
+      { "text": "Thank him and sit back down", "next": "subway_sleeping" },
+      { "text": "Ask where the train is going", "next": "deep_journey" }
+    ]
+  },
+  {
+    "stage": "wall_encounter",
+    "description": "The wall shivers, revealing a secret panel. Inside is a small crystal sphere humming with power.",
+    "options": [
+      {
+        "text": "Take the sphere and rejoin the car",
+        "next": "subway_sleeping",
+        "reward": "Crystal Shard"
+      },
+      { "text": "Climb through the panel", "next": "crystal_city_entrance" }
+    ]
+  },
+  {
+    "stage": "lizard_observation",
+    "description": "You watch as the lizards vote in a council meeting using thought projections. A clerk notices you.",
+    "options": [
+      { "text": "Introduce yourself", "next": "crystal_exploration" },
+      {
+        "text": "Run before they see too much",
+        "next": "human_search",
+        "stat_changes": { "fear": 1 }
+      }
+    ]
+  },
+  {
+    "stage": "crystal_exploration",
+    "description": "Inside the buildings, you find light-powered elevators and memory archives encoded in glowing tiles.",
+    "options": [
+      {
+        "text": "Use your Crystal Shard on an archive",
+        "next": "scale_visions",
+        "required_item": "Crystal Shard"
+      },
+      { "text": "Leave and find other humans", "next": "human_search" }
+    ]
+  },
+  {
+    "stage": "human_search",
+    "description": "You find graffiti: 'WE ESCAPED. FIND THE FRACTURE.' A strange pulse guides you toward the subway again.",
+    "options": [
+      { "text": "Follow the pulse to the depths", "next": "start_depths" },
+      {
+        "text": "Ignore it and try blending into the lizard society",
+        "next": "lizard_observation"
+      }
+    ]
+  },
+  {
+    "stage": "thought_trail",
+    "description": "Your thoughts lead to a mirror that reflects you as a lizard-hybrid. It offers you a forked staff.",
+    "options": [
+      {
+        "text": "Take the staff and continue",
+        "next": "chaos_acceptance",
+        "reward": "Chaos Fragment"
+      },
+      { "text": "Smash the mirror and flee", "next": "reality_search" }
+    ]
+  },
+  {
+    "stage": "reality_search",
+    "description": "You find a rusted subway map etched into stone. One stop reads: 'Home (through Fracture)'.",
+    "options": [
+      { "text": "Search for the Fracture", "next": "rift_creation" },
+      {
+        "text": "Give up and lie down",
+        "next": "ending_lost_forever",
+        "stat_changes": { "sanity": -2 }
+      }
+    ]
+  },
+  {
+    "stage": "crystal_city_entrance",
+    "description": "You step into the city again, your mind sharper than before. Something calls you deeper.",
+    "options": [
+      { "text": "Search for other humans", "next": "human_search" },
+      {
+        "text": "Explore more crystal structures",
+        "next": "crystal_exploration"
+      }
+    ]
+  },
+  {
+    "stage": "scale_visions",
+    "description": "Visions flood your mind: an underground fractal tear in reality connecting all worlds.",
+    "options": [
+      { "text": "Follow the vision to the Fracture", "next": "rift_creation" },
+      { "text": "Collapse in awe", "next": "ending_lost_forever" }
+    ]
+  },
+  {
+    "stage": "deep_journey",
+    "description": "The train takes you beyond maps. The car empties. A door opens to endless stars and singing data.",
+    "options": [
+      { "text": "Walk into the void", "next": "ending_lost_forever" },
+      {
+        "text": "Jump off at the last visible station",
+        "next": "crystal_city_entrance"
+      }
+    ]
+  },
+  {
+    "stage": "chaos_acceptance",
+    "description": "You dissolve your sense of self. The Chaos Fragment pulses as your body flickers like static.",
+    "options": [
+      {
+        "text": "Let go completely and become part of the Depths",
+        "next": "ending_lost_forever",
+        "stat_changes": { "sanity": -3 }
+      },
+      {
+        "text": "Use the Chaos Fragment to reshape your surroundings",
+        "next": "rift_creation",
+        "required_item": "Chaos Fragment"
+      }
+    ]
+  },
+  {
+    "stage": "rift_creation",
+    "description": "You stand at the intersection of crystal logic and chaotic thought. Vision and Chaos fragments hum.",
+    "options": [
+      {
+        "text": "Combine the fragments and step through",
+        "next": "ending_homebound",
+        "required_items": ["Vision Fragment", "Chaos Fragment"]
+      },
+      { "text": "Hesitate and turn back", "next": "chaos_acceptance" }
+    ]
+  },
+  {
+    "stage": "ending_lost_forever",
+    "description": "You wander deeper into the Depths, surrendering your memories. You become a whisper in the void.",
+    "options": []
+  },
+  {
+    "stage": "ending_homebound",
+    "description": "Using the Vision and Chaos Fragments, you rip a hole back to NYC. But something followed you out.",
+    "options": []
+  }
+]
