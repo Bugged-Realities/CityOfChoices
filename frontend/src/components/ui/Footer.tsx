@@ -17,13 +17,13 @@ const Footer: React.FC = () => {
       <div className="text-right space-y-1">
         <div className="space-x-4">
           <a
-            href="#about"
+            href="https://docs.google.com/document/d/1HOhj8fM_9Ww-TwvVR8XpmEXX7NtHQmJ74rXF5tX36G4/edit?tab=t.0"
             className="hover:underline hover:text-[#61B044] transition-colors"
           >
-            About
+            Resume
           </a>
           <a
-            href="https://github.com/your-github"
+            href="https://github.com/ajenec"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:underline hover:text-[#61B044] transition-colors"

@@ -1,25 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import CharacterInfo from "./CharacterInfo";
-import InventoryInfo from "./InventoryInfo";
+import CharacterInfo from "../character/CharacterInfo";
+import InventoryInfo from "../character/InventoryInfo";
 import StoryContent from "./StoryContent";
 import GameEndedScreen from "./GameEndedScreen";
 import Background from "./Background";
-import { useGameState } from "../hooks/useGameState";
-
-// Loading component
-const LoadingSpinner = () => (
-  <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#0A0F1C] via-[#1A1F2C] to-[#0A0F1C]">
-    <div className="bg-[#1A1F2C] border-2 border-[#5ec3b8] rounded-lg p-6 shadow-xl max-w-md">
-      <h2 className="text-[#5ec3b8] font-['Press_Start_2P'] text-xl font-bold text-center mb-4">
-        🔄 Loading...
-      </h2>
-      <p className="text-[#E8E6E3] font-['Press_Start_2P'] text-sm text-center">
-        Preparing your journey...
-      </p>
-    </div>
-  </div>
-);
+import LoadingSpinner from "../common/LoadingSpinner";
+import { useGameState } from "../../hooks/game";
 
 function GameLayout() {
   const navigate = useNavigate();
@@ -29,7 +16,6 @@ function GameLayout() {
     node,
     error,
     gameEnded,
-    isLoading,
     canItemTriggerStory,
     canMakeChoice,
     getMissingItemsForChoice,
@@ -40,7 +26,7 @@ function GameLayout() {
     setGameState,
   } = useGameState();
 
-  const [currentStageId, setCurrentStageId] = useState("start_subway");
+  const [currentStageId, setCurrentStageId] = useState<string>("");
 
   // Update background when stage changes
   useEffect(() => {
@@ -64,8 +50,8 @@ function GameLayout() {
       </div>
     );
 
-  // Show loading spinner if no node or loading
-  if (!node || isLoading) {
+  // Show loading spinner only for initial load or when no node exists
+  if (!node) {
     return <LoadingSpinner />;
   }
 

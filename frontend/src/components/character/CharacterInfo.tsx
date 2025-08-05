@@ -1,6 +1,6 @@
 import React from "react";
-import SaveLoadControls from "./SaveLoadControls";
-import type { Character, GameState } from "../types";
+import SaveLoadControls from "../save-load/SaveLoadControls";
+import type { Character, GameState } from "../../types";
 
 interface CharacterInfoProps {
   character: Character | null;

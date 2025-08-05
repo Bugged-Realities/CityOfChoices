@@ -1,6 +1,6 @@
-import HeaderSection from "../components/Header";
-import Footer from "../components/Footer";
-import HomeIntroSection from "../components/HomeIntroSection";
+import HeaderSection from "../components/ui/Header";
+import Footer from "../components/ui/Footer";
+import HomeIntroSection from "../components/ui/HomeIntroSection";
 import { useNavigate } from "react-router-dom";
 import { getToken } from "../api/auth";
 
@@ -33,16 +33,6 @@ const HomePage = () => {
           <HeaderSection />
           <main className="flex-grow overflow-y-auto pt-16 pb-20">
             <HomeIntroSection />
-            {isLoggedIn && (
-              <div className="text-center my-6 px-4">
-                <button
-                  onClick={() => navigate("/game")}
-                  className="bg-[#61B044] hover:bg-[#2F702F] text-[#E8E6E3] font-['Press_Start_2P'] font-bold px-8 py-4 rounded-lg border-2 border-[#E05219] hover:border-[#61B044] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 backdrop-blur-sm"
-                >
-                  🎮 Continue Your Adventure
-                </button>
-              </div>
-            )}
           </main>
           <Footer />
         </div>

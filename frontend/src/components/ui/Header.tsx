@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { getToken, logout } from "../api/auth";
+import { getToken, logout } from "../../api/auth";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();

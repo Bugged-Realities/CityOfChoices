@@ -1,5 +1,5 @@
-import GameLayout from "../components/GameLayout";
-import Header from "../components/Header";
+import GameLayout from "../components/game/GameLayout";
+import Header from "../components/ui/Header";
 
 function GamePage() {
   return (

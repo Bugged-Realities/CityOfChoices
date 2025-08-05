@@ -1,5 +1,5 @@
 import React from "react";
-import type { Option, StoryNode } from "../types";
+import type { Option, StoryNode } from "../../types";
 
 interface StoryContentProps {
   node: StoryNode | null;

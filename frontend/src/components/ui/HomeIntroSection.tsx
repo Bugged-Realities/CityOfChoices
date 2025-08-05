@@ -66,16 +66,16 @@ const HomeIntroSection: React.FC = () => {
               <div
                 key={idx}
                 tabIndex={0}
-                className="aspect-square p-6 bg-[#0A0F1C] rounded-lg border border-[#5ec3b8] hover:border-[#E05219] transition-colors flex flex-col items-center justify-center text-center shadow-lg"
+                className="aspect-square p-4 bg-[#0A0F1C] rounded-lg border border-[#5ec3b8] hover:border-[#E05219] transition-colors flex flex-col items-center justify-center text-center shadow-lg"
               >
-                <span aria-hidden="true" className="text-3xl mb-3">
+                <span aria-hidden="true" className="text-2xl mb-2">
                   {feature.icon}
                 </span>
-                <div className="space-y-2">
-                  <div className="text-[#E05219] font-['Press_Start_2P'] font-bold text-sm">
+                <div className="space-y-1">
+                  <div className="text-[#E05219] font-['Press_Start_2P'] font-bold text-xs">
                     {feature.title}
                   </div>
-                  <div className="text-[#8B8A91] text-sm leading-tight">
+                  <div className="text-[#8B8A91] text-xs leading-tight">
                     {feature.desc}
                   </div>
                 </div>

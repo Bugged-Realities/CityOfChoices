@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { saveGameState, loadGameState } from "../api/storyFetch";
+import { saveGameState, loadGameState } from "../../api/storyFetch";
 import LoadGameModal from "./LoadGameModal";
-import type { GameState } from "../types";
+import type { GameState } from "../../types";
 
 interface SavedGameData {
   current_stage?: string;

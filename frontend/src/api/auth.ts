@@ -59,6 +59,7 @@ export async function updateCharacterStats(updates: {
   return data;
 }
 
+// Delete a character when the user wants to start a new game
 export async function deleteCharacter(characterId: number) {
   const [data, error] = await fetchHandler(
     `/api/characters/${characterId}`,
@@ -74,4 +75,29 @@ export function logout() {
 
 export function getToken() {
   return localStorage.getItem("authToken");
+}
+
+// Validate token by calling the load endpoint
+export async function validateToken(): Promise<boolean> {
+  const token = getToken();
+  if (!token) {
+    return false;
+  }
+
+  try {
+    const [, error] = await fetchHandler("/api/auth/load", basicFetchOptions());
+
+    if (error) {
+      // Token is invalid or expired
+      localStorage.removeItem("authToken");
+      return false;
+    }
+
+    // Token is valid
+    return true;
+  } catch (error) {
+    // Network error or server down
+    localStorage.removeItem("authToken");
+    return false;
+  }
 }
