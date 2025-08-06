@@ -44,7 +44,11 @@ python test_registration.py
 echo "🔐 Testing login process..."
 python test_login.py
 
-# 6. Seed the database
+# 6. Test API endpoints
+echo "🌐 Testing API endpoints..."
+python test_api_endpoints.py
+
+# 7. Seed the database
 echo "🌱 Seeding database with story data..."
 python seed_scenes.py
 
