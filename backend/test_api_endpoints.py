@@ -5,7 +5,6 @@ Test script to check API endpoints.
 
 import os
 import sys
-import requests
 import json
 
 # Add the current directory to the Python path
