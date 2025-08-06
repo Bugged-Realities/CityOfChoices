@@ -6,7 +6,7 @@ import {
   resetInventory,
   resetCharacter,
 } from "../../api/storyFetch";
-import { fetchCharacter, validateToken } from "../../api/auth";
+import { fetchCharacter } from "../../api/auth";
 import type { InventoryItem, Character, StoryNode } from "../../types";
 import { useChoiceManagement } from "./useChoiceManagement";
 import { useInventoryManagement } from "./useInventoryManagement";
@@ -77,17 +77,9 @@ export const useGameState = () => {
     isRestarting,
   });
 
-  // Load the character on mount with token validation
+  // Load the character on mount (AuthGuard ensures user is authenticated)
   useEffect(() => {
     const initializeGame = async () => {
-      // Validate token first
-      const isValid = await validateToken();
-      if (!isValid) {
-        navigate("/login");
-        return;
-      }
-
-      // Token is valid, load character and inventory
       try {
         const characterData = await fetchCharacter();
         setCharacter(characterData.character);
@@ -95,7 +87,10 @@ export const useGameState = () => {
         const inventoryData = await fetchInventory();
         setInventory(inventoryData.inventory);
       } catch (error) {
+        console.error("Failed to load character or inventory:", error);
         setError("Failed to load character or inventory.");
+        // If character fetch fails, redirect to login
+        navigate("/login");
       }
     };
 
