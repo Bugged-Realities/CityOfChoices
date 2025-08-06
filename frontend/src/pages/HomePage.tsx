@@ -1,13 +1,8 @@
 import HeaderSection from "../components/ui/Header";
 import Footer from "../components/ui/Footer";
 import HomeIntroSection from "../components/ui/HomeIntroSection";
-import { useNavigate } from "react-router-dom";
-import { getToken } from "../api/auth";
 
 const HomePage = () => {
-  const navigate = useNavigate();
-  const isLoggedIn = !!getToken();
-
   return (
     <>
       <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#0A0F1C] via-[#1A1F2C] to-[#0A0F1C] relative">

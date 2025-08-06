@@ -1,8 +1,9 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
+import os
 from .config import Config
 from .models import db
 from .utils.error_handling import (
@@ -18,7 +19,7 @@ bcrypt = Bcrypt()
 migrate = Migrate()
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder='static', static_url_path='')
     app.config.from_object(Config)
     
     # Initialize extensions with app
@@ -49,6 +50,15 @@ def create_app():
     app.register_blueprint(character_bp, url_prefix='/api/characters')
     app.register_blueprint(game_bp, url_prefix='/api/game')
     app.register_blueprint(inventory_bp, url_prefix='/api/inventory')
+    
+    # Serve React frontend
+    @app.route('/', defaults={'path': ''})
+    @app.route('/<path:path>')
+    def serve(path):
+        if path != "" and os.path.exists(app.static_folder + '/' + path):
+            return send_from_directory(app.static_folder, path)
+        else:
+            return send_from_directory(app.static_folder, 'index.html')
     
     # Register error handlers
     @app.errorhandler(GameException)
