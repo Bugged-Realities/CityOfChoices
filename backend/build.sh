@@ -29,6 +29,7 @@ cd ../backend
 echo "🗄️ Running database migrations..."
 export FLASK_APP=run.py
 export FLASK_ENV=production
+export PYTHONPATH=$(pwd)
 flask db upgrade
 
 # 3. Seed the database
