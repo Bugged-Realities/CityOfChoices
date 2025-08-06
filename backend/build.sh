@@ -30,6 +30,10 @@ export FLASK_APP=run.py
 export FLASK_ENV=production
 python fix_migrations.py
 
+# Check database structure
+echo "🔍 Checking database structure..."
+python check_db.py
+
 # Seed the database with story data
 echo "🌱 Seeding database with story data..."
 python seed_scenes.py
