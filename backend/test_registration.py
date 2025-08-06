@@ -23,7 +23,8 @@ def test_registration():
         try:
             # Check database connection
             print("1. Testing database connection...")
-            db.engine.execute(text("SELECT 1"))
+            with db.engine.connect() as connection:
+                connection.execute(text("SELECT 1"))
             print("✅ Database connection successful")
             
             # Check table structure

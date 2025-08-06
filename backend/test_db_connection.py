@@ -22,22 +22,25 @@ def test_db_connection():
         
         try:
             # Test basic connection
-            result = db.engine.execute(text("SELECT 1 as test"))
-            print("✅ Database connection successful")
+            with db.engine.connect() as connection:
+                result = connection.execute(text("SELECT 1 as test"))
+                print("✅ Database connection successful")
             
             # Test database URL
             db_url = db.engine.url
             print(f"📊 Database URL: {db_url}")
             
             # Test if we can query the database
-            result = db.engine.execute(text("SELECT current_database()"))
-            db_name = result.fetchone()[0]
-            print(f"📊 Connected to database: {db_name}")
+            with db.engine.connect() as connection:
+                result = connection.execute(text("SELECT current_database()"))
+                db_name = result.fetchone()[0]
+                print(f"📊 Connected to database: {db_name}")
             
             # Test if tables exist
-            result = db.engine.execute(text("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"))
-            tables = [row[0] for row in result.fetchall()]
-            print(f"📋 Available tables: {tables}")
+            with db.engine.connect() as connection:
+                result = connection.execute(text("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"))
+                tables = [row[0] for row in result.fetchall()]
+                print(f"📋 Available tables: {tables}")
             
             print("✅ All database tests passed!")
             
