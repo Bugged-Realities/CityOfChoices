@@ -30,4 +30,8 @@ export FLASK_APP=run.py
 export FLASK_ENV=production
 python fix_migrations.py
 
+# Seed the database with story data
+echo "🌱 Seeding database with story data..."
+python seed_scenes.py
+
 echo "✅ Build completed successfully!" 
