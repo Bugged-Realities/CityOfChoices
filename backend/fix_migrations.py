@@ -40,6 +40,14 @@ def fix_database():
                 print("✅ Database stamped with latest migration!")
             else:
                 print("📝 Tables exist. Running migrations...")
+                try:
+                    # First try to stamp with the merge revision to resolve multiple heads
+                    stamp(revision='ccf4576385e6')
+                    print("✅ Database stamped with merge revision!")
+                except Exception as e:
+                    print(f"⚠️ Could not stamp with merge revision: {e}")
+                
+                # Then run upgrades
                 upgrade()
                 print("✅ Migrations completed successfully!")
                 
