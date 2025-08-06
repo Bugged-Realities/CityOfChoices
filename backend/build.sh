@@ -32,7 +32,15 @@ export FLASK_ENV=production
 export PYTHONPATH=$(pwd)
 flask db upgrade
 
-# 3. Seed the database
+# 3. Test database connection
+echo "🔍 Testing database connection..."
+python test_db_connection.py
+
+# 4. Test registration process
+echo "🧪 Testing registration process..."
+python test_registration.py
+
+# 5. Seed the database
 echo "🌱 Seeding database with story data..."
 python seed_scenes.py
 
