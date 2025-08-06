@@ -98,14 +98,31 @@ def login():
         
         username = data['username'].strip()
         password = data['password']
+        
+        print(f"🔍 Login attempt for username: {username}")
+        
         user = Users.query.filter((Users.username == username) | (Users.email == username)).first()
         
-        if not user or not bcrypt.check_password_hash(user.password_hash, password):
+        if not user:
+            print(f"❌ User not found for username: {username}")
             return jsonify({'error': 'invalid credentials'}), 401
+        
+        print(f"✅ User found: {user.username} (ID: {user.id})")
+        
+        password_check = bcrypt.check_password_hash(user.password_hash, password)
+        print(f"🔍 Password check result: {password_check}")
+        
+        if not password_check:
+            print(f"❌ Password check failed for user: {user.username}")
+            return jsonify({'error': 'invalid credentials'}), 401
+        
+        print(f"✅ Password check passed for user: {user.username}")
         access_token = create_access_token(identity=user.id)
+        print(f"✅ JWT token created for user ID: {user.id}")
         
         return jsonify({'message': 'Login successful', 'access_token': access_token}), 200
     except Exception as e:
+        print(f"❌ Login error: {e}")
         return jsonify({'error': 'Login failed', 'details': str(e)}), 500
 
 
