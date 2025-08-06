@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-# Build script for Render deployment
+# exit on error
+set -o errexit
 
 echo "🚀 Starting build process..."
 
-# Install Python dependencies
+# 1. Install Dependencies
 echo "📦 Installing Python dependencies..."
 pip install -r requirements.txt
 
@@ -24,17 +25,13 @@ cp -r dist/* ../backend/app/static/
 # Navigate back to backend directory
 cd ../backend
 
-# Run database migrations
+# 2. Run Database Migrations
 echo "🗄️ Running database migrations..."
 export FLASK_APP=run.py
 export FLASK_ENV=production
-python fix_migrations.py
+flask db upgrade
 
-# Check database structure
-echo "🔍 Checking database structure..."
-python check_db.py
-
-# Seed the database with story data
+# 3. Seed the database
 echo "🌱 Seeding database with story data..."
 python seed_scenes.py
 
