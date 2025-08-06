@@ -31,7 +31,16 @@ def create_character():
         db.session.add(new_character)
         db.session.flush()
 
-        initial_game_state = GameState(character_id=new_character.id, current_stage='start', scene_id=1, choice_history=[], current_stats={'fear': 0, 'sanity': 100}, inventory_snapshot=[])
+        initial_game_state = GameState(
+            character_id=new_character.id,
+            stage_id='start',
+            game_data={
+                'current_stage': 'start',
+                'choice_history': [],
+                'current_stats': {'fear': 0, 'sanity': 100},
+                'inventory_snapshot': []
+            }
+        )
         db.session.add(initial_game_state)
         db.session.commit()
         return jsonify({'message': 'Character created successfully', 'character': new_character.to_dict(), 'game_state': initial_game_state.to_dict()}), 201
@@ -53,7 +62,7 @@ def get_character():
         if not character:
             return jsonify({'error': 'Character not found'}), 404
         
-        game_state = GameState.query.filter_by(character_id=character.id).order_by(GameState.last_updated.desc()).first()
+        game_state = GameState.query.filter_by(character_id=character.id).order_by(GameState.created_at.desc()).first()
         
         return jsonify({'character': character.to_dict(), 'game_state': game_state.to_dict() if game_state else None}), 200
     
@@ -109,11 +118,13 @@ def reset_character():
         # Reset game state to start
         game_state = GameState.query.filter_by(character_id=character.id).first()
         if game_state:
-            game_state.current_stage = 'start'
-            game_state.scene_id = 'start'
-            game_state.choice_history = []
-            game_state.current_stats = {'fear': 0, 'sanity': 100}
-            game_state.inventory_snapshot = []
+            game_state.stage_id = 'start'
+            game_state.game_data = {
+                'current_stage': 'start',
+                'choice_history': [],
+                'current_stats': {'fear': 0, 'sanity': 100},
+                'inventory_snapshot': []
+            }
         
         db.session.commit()
         
