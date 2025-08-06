@@ -48,7 +48,11 @@ python test_login.py
 echo "🌐 Testing API endpoints..."
 python test_api_endpoints.py
 
-# 7. Seed the database
+# 7. Test static file serving
+echo "📁 Testing static file serving..."
+python test_static_files.py
+
+# 8. Seed the database
 echo "🌱 Seeding database with story data..."
 python seed_scenes.py
 
