@@ -10,33 +10,28 @@ export function getAuthHeaders(extraHeaders = {}) {
 
 export const basicFetchOptions = () => ({
   method: "GET",
-  credentials: "include" as const,
   headers: getAuthHeaders(),
 });
 
 export const deleteOptions = {
   method: "DELETE",
-  credentials: "include" as const,
   headers: getAuthHeaders(),
 };
 
 export const getPostOptions = (body: Record<string, unknown>) => ({
   method: "POST",
-  credentials: "include" as const,
   headers: getAuthHeaders({ "Content-Type": "application/json" }),
   body: JSON.stringify(body),
 });
 
 export const getPatchOptions = (body: Record<string, unknown>) => ({
   method: "PATCH",
-  credentials: "include" as const,
   headers: getAuthHeaders({ "Content-Type": "application/json" }),
   body: JSON.stringify(body),
 });
 
 export const getPutOptions = (body: Record<string, unknown>) => ({
   method: "PUT",
-  credentials: "include" as const,
   headers: getAuthHeaders({ "Content-Type": "application/json" }),
   body: JSON.stringify(body),
 });
