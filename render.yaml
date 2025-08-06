@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: city-of-choices
+    env: python
+    buildCommand: bash backend/build.sh
+    startCommand: cd backend && gunicorn run:app
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FLASK_ENV
+        value: production
+      - key: FLASK_APP
+        value: run.py

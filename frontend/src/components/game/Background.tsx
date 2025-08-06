@@ -154,7 +154,7 @@ const Background: React.FC<BackgroundProps> = ({ stageId }) => {
           backgroundImage: `url(${currentThemeData.image})`,
           filter: getMoodFilter(currentThemeData.mood),
         }}
-        onError={(e) =>
+        onError={() =>
           console.error(
             "Failed to load background image:",
             currentThemeData.image
