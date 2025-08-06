@@ -21,4 +21,13 @@ echo "📁 Copying frontend build to backend..."
 mkdir -p ../backend/app/static
 cp -r dist/* ../backend/app/static/
 
+# Navigate back to backend directory
+cd ../backend
+
+# Run database migrations
+echo "🗄️ Running database migrations..."
+export FLASK_APP=run.py
+export FLASK_ENV=production
+python fix_migrations.py
+
 echo "✅ Build completed successfully!" 
