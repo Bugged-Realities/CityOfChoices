@@ -23,7 +23,8 @@ def create_app():
     app.config.from_object(Config)
     
     # Initialize extensions with app
-    CORS(app, origins=['http://localhost:5173', 'http://127.0.0.1:5173'])
+    # Allow all origins for production deployment
+    CORS(app, origins=['*'], supports_credentials=True)
     jwt.init_app(app)
     bcrypt.init_app(app)
     db.init_app(app)
@@ -39,6 +40,19 @@ def create_app():
         identity = jwt_data["sub"]
         from .models import Users
         return Users.query.filter_by(id=int(identity)).one_or_none()
+    
+    # JWT error handlers
+    @jwt.expired_token_loader
+    def expired_token_callback(jwt_header, jwt_payload):
+        return {"error": "Token has expired"}, 401
+    
+    @jwt.invalid_token_loader
+    def invalid_token_callback(error):
+        return {"error": "Invalid token"}, 401
+    
+    @jwt.unauthorized_loader
+    def missing_token_callback(error):
+        return {"error": "Missing token"}, 401
     
     # Import and register blueprints
     from .routes.auth_routes import auth_bp
