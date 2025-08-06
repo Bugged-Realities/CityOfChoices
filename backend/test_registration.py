@@ -84,11 +84,13 @@ def test_registration():
             print("\n5. Testing game state creation...")
             initial_game_state = GameState(
                 character_id=default_character.id,
-                current_stage='start',
-                scene_id='start',
-                choice_history=[],
-                current_stats={'fear': 0, 'sanity': 100},
-                inventory_snapshot=[]
+                stage_id='start',
+                game_data={
+                    'current_stage': 'start',
+                    'choice_history': [],
+                    'current_stats': {'fear': 0, 'sanity': 100},
+                    'inventory_snapshot': []
+                }
             )
             db.session.add(initial_game_state)
             db.session.commit()
