@@ -40,7 +40,11 @@ python test_db_connection.py
 echo "🧪 Testing registration process..."
 python test_registration.py
 
-# 5. Seed the database
+# 5. Test login process
+echo "🔐 Testing login process..."
+python test_login.py
+
+# 6. Seed the database
 echo "🌱 Seeding database with story data..."
 python seed_scenes.py
 
