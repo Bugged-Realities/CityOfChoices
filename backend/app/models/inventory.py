@@ -2,7 +2,7 @@ from datetime import datetime
 from . import db
 
 class Inventory(db.Model):
-    __tablename__ = 'inventory'
+    __tablename__ = 'inventory'  # Reverted back to 'inventory'
     
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     character_id = db.Column(db.BigInteger, db.ForeignKey('characters.id'), nullable=False)

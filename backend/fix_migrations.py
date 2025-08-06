@@ -8,13 +8,35 @@ import os
 import sys
 from flask import Flask
 from flask_migrate import upgrade, stamp
-from sqlalchemy import text
+from sqlalchemy import text, inspect
 
 # Add the current directory to the Python path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from app import create_app
 from app.models import db
+
+def fix_table_names():
+    """Fix table name mismatches between models and actual database."""
+    try:
+        inspector = inspect(db.engine)
+        tables = inspector.get_table_names()
+        
+        # Check if inventory table exists with different name
+        if 'inventory_items' in tables and 'inventory' not in tables:
+            print("🔧 Fixing inventory table name mismatch...")
+            # Update the model to use the correct table name
+            from app.models.inventory import Inventory
+            Inventory.__tablename__ = 'inventory_items'
+            print("✅ Fixed inventory table name to 'inventory_items'")
+        elif 'inventory' in tables and 'inventory_items' not in tables:
+            print("🔧 Fixing inventory table name mismatch...")
+            from app.models.inventory import Inventory
+            Inventory.__tablename__ = 'inventory'
+            print("✅ Fixed inventory table name to 'inventory'")
+            
+    except Exception as e:
+        print(f"⚠️ Could not fix table names: {e}")
 
 def seed_database():
     """Seed the database with story data."""
@@ -69,6 +91,9 @@ def fix_database():
             inspector = db.inspect(db.engine)
             existing_tables = inspector.get_table_names()
             print(f"📋 Existing tables: {existing_tables}")
+            
+            # Fix table name mismatches
+            fix_table_names()
             
             # If no tables exist, create them
             if not existing_tables:
