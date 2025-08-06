@@ -116,37 +116,6 @@ const Background: React.FC<BackgroundProps> = ({ stageId }) => {
 
   return (
     <div className="background-container">
-      {/* Debug indicator */}
-      <div
-        style={{
-          position: "absolute",
-          top: "10px",
-          left: "10px",
-          zIndex: 1000,
-          background: "rgba(0,0,0,0.7)",
-          color: "white",
-          padding: "5px",
-          fontSize: "12px",
-          borderRadius: "4px",
-        }}
-      >
-        Stage: {stageId} | Theme: {currentTheme}
-        <button
-          onClick={() => {
-            const themes = Object.keys(BACKGROUND_THEMES) as BackgroundTheme[];
-            const nextTestTheme =
-              themes[(themes.indexOf(currentTheme) + 1) % themes.length];
-            // This is a mock change for testing; in the real app, the parent would change the stageId prop.
-            // To properly test, you'd need to simulate the parent changing the stageId.
-            console.log("Manual test: switching to", nextTestTheme);
-            setCurrentTheme(nextTestTheme);
-          }}
-          style={{ marginLeft: "10px", padding: "2px 5px", fontSize: "10px" }}
-        >
-          Test Theme Change
-        </button>
-      </div>
-
       {/* Background layer */}
       <div
         className="background-layer"
