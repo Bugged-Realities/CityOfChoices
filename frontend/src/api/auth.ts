@@ -97,6 +97,7 @@ export async function validateToken(): Promise<boolean> {
     return true;
   } catch (error) {
     // Network error or server down
+    console.error("Error validating token:", error);
     localStorage.removeItem("authToken");
     return false;
   }

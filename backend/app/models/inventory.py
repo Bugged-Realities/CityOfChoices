@@ -2,11 +2,13 @@ from datetime import datetime
 from . import db
 
 class Inventory(db.Model):
-    __tablename__ = 'inventories'  # Changed to match actual table name
+    __tablename__ = 'inventory'  # Fixed to match actual table name
     
     id = db.Column(db.BigInteger, primary_key=True, autoincrement=True)
     character_id = db.Column(db.BigInteger, db.ForeignKey('characters.id'), nullable=False)
-    items = db.Column(db.JSON, nullable=True)  # Changed to match actual column
+    item_name = db.Column(db.Text, nullable=False)  # Fixed to match database
+    description = db.Column(db.Text, nullable=True)  # Fixed to match database
+    used = db.Column(db.Boolean, nullable=False)  # Fixed to match database
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
     # Relationship to Character table
@@ -16,6 +18,8 @@ class Inventory(db.Model):
         return {
             'id': self.id,
             'character_id': self.character_id,
-            'items': self.items,
+            'item_name': self.item_name,
+            'description': self.description,
+            'used': self.used,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
