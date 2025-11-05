@@ -139,17 +139,34 @@ export const useChoiceManagement = ({
       if (selectedOption?.stat_changes && character) {
         try {
           // Add small random variation (±2 points)
-          const randomFear = Math.floor(Math.random() * 5) - 10; // -10 to +10
-          const randomSanity = Math.floor(Math.random() * 5) - 10; // -10 to +10
+          const randomFear = Math.floor(Math.random() * 5) - 2; // -2 to +2
+          const randomSanity = Math.floor(Math.random() * 5) - 2; // -2 to +2
 
-          const newFear =
-            (character.fear || 0) +
-            (selectedOption.stat_changes.fear || 0) +
-            randomFear;
-          const newSanity =
-            (character.sanity || 0) +
-            (selectedOption.stat_changes.sanity || 0) +
-            randomSanity;
+          const newFear = Math.max(
+            0,
+            Math.min(
+              100,
+              (character.fear || 0) +
+                (selectedOption.stat_changes.fear || 0) +
+                randomFear
+            )
+          );
+          const newSanity = Math.max(
+            0,
+            Math.min(
+              100,
+              (character.sanity || 0) +
+                (selectedOption.stat_changes.sanity || 0) +
+                randomSanity
+            )
+          );
+
+          console.log("Fear calculation:", {
+            currentFear: character.fear,
+            statChange: selectedOption.stat_changes.fear,
+            randomVariation: randomFear,
+            newFear: newFear,
+          });
 
           const updatedCharacter = await updateCharacterStats({
             fear: newFear,
