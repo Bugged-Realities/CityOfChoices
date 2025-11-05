@@ -166,8 +166,13 @@ CityOfChoices/
 
 ## Game UI/UX
 
+- When you first create an account, you’ll enter the game world, make your first choices, and view your player stats: 
 ![When the user first enters the game](./frontend/public/read-me/entergameimage.png)
+
+- As you acquire items, an **Inventory button appears**, allowing you to use them strategically. Certain paths in the game require specific items to progress:
 ![Use Inventory](./frontend/public/read-me/gameinventoryimage.png)
+
+- When you complete the game, an **End Screen** appears showing your final stats and a personalized ending message:
 ![End Game Screen](./frontend/public/read-me/endgameimage.png)
 
 ## 🤝 Contributing
