@@ -6,6 +6,8 @@ A pixel-art interactive story game set in a surreal NYC subway ruled by lizard p
 
 **City of Choices** is an immersive text-based adventure where you navigate through a pixelated New York City subway system. The world is ruled by lizard people and overseen by a mysterious king. Your decisions determine your fate as you explore the depths of this surreal underground world.
 
+![Home Page Screenshot](./frontend/public/read-me/homepageimage.png)
+
 ### Key Features
 
 - **Branching Storylines**: Every choice leads to different outcomes and story paths
@@ -161,6 +163,12 @@ CityOfChoices/
 3. **Manage Stats**: Watch your fear and sanity levels
 4. **Collect Items**: Find items to unlock new paths
 5. **Explore**: Discover different endings through multiple playthroughs
+
+## Game UI/UX
+
+![When the user first enters the game](./frontend/public/read-me/entergameimage.png)
+![Use Inventory](./frontend/public/read-me/gameinventoryimage.png)
+![End Game Screen](./frontend/public/read-me/endgameimage.png)
 
 ## 🤝 Contributing
 
